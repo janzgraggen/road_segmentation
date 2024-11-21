@@ -1,0 +1,6 @@
+_target_: src.logger.TensorBoardWriter
+log_dir: runs 
+run_name: "testing"
+loss_names: ["loss"] # which losses to log (useful for multi-loss tasks, s.a. GANs)
+log_checkpoints: False
+id_length: 8 # length of the run_id
