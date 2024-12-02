@@ -1,0 +1,6 @@
+train: 
+  - _target_: src.metrics.AccuracyMetric
+    name: "Accuracy"
+inference: # metrics that are calculated during inference (eval)
+  - _target_: src.metrics.AccuracyMetric
+    name: "Accuracy"

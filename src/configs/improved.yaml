@@ -1,5 +1,5 @@
 defaults:
-  - model: baseline 
+  - model: improved 
   - writer: tensorboard 
   - metrics: accuracy
   - datasets: road 

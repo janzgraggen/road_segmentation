@@ -25,16 +25,16 @@ class BaselineModel(nn.Module):
             nn.Linear(in_features=fc_hidden, out_features=n_class),
         )
 
-    def forward(self, data_object, **batch):
+    def forward(self, img, **batch):
         """
         Model forward method.
 
         Args:
-            data_object (Tensor): input vector.
+            img (Tensor): input img.
         Returns:
             output (dict): output dict containing logits.
         """
-        return {"logits": self.net(data_object)}
+        return {"logits": self.net(img.flatten(1))}
 
     def __str__(self):
         """

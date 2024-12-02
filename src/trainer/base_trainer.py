@@ -223,11 +223,11 @@ class BaseTrainer:
             # log current results
             if batch_idx % self.log_step == 0:
                 self.writer.set_step((epoch - 1) * self.epoch_len + batch_idx)
-                self.logger.debug(
-                    "Train Epoch: {} {} Loss: {:.6f}".format(
-                        epoch, self._progress(batch_idx), batch["loss"].item()
-                    )
-                )
+                # self.logger.debug(
+                #     "Train Epoch: {} {} Loss: {:.6f}".format(
+                #         epoch, self._progress(batch_idx), batch["loss"].item()
+                #     )
+                # )
                 self.writer.add_scalar(
                     "learning rate", self.lr_scheduler.get_last_lr()[0]
                 )

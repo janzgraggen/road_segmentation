@@ -88,7 +88,7 @@ class TensorBoardWriter:
             image (Path | Tensor | ndarray | list[tuple] | Image): image
                 in the CometML-friendly format.
         """
-        self.writer.add_image(image_name, image, self.step)
+        # self.writer.add_image(image_name, image, self.step)
 
     def add_audio(self, audio_name, audio, sample_rate=None):
         raise NotImplementedError()
