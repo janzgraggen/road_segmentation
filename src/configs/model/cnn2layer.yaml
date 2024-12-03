@@ -1,0 +1,25 @@
+_target_: src.model.CNN2Layer
+# Input_dim/16 = out dim  (304/16 = 19)
+out_dim: 19
+
+# FC Layer
+fc_hidden: 512
+
+# Convolutional Layer 1
+out_channels1: 64
+kernel1: 10
+stride1: 1
+padding1: 1
+bias1: False
+
+# Pooling Layer 1
+pool1_kernel: 2
+pool1_stride: 2
+pool1_padding: 0
+
+# Convolutional Layer 2
+out_channels2: 128
+kernel2: 10
+stride2: 1
+padding2: 1
+bias2: False

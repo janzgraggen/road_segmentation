@@ -1,5 +1,5 @@
 defaults:
-  - model: base304cnn 
+  - model: CNN2Layer
   - writer: tensorboard 
   - metrics: accuracy
   - datasets: context_road 
