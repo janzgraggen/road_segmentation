@@ -10,39 +10,42 @@ logger = logging.getLogger(__name__)
 
 
 class ContextRoadDataset(Dataset):
-    PATCH_SIZE = 16
-    ROAD_THRESHOLD = 0.25
-
     def __init__(
         self,
-        size: int,
+        image_size: int,
+        patch_size: int,
+        road_threshold: float,
         data_path: str,
         target_path: str | None = None,
         shuffle: bool = False,
         seed: int = 42,
     ):
-        assert size > 0, "Size should be greater than 0."
-        assert (
-            size % self.PATCH_SIZE == 0
-        ), f"Size should be divisible by {self.PATCH_SIZE}."
+        assert image_size > 0
+        assert image_size % patch_size == 0
 
         random.seed(seed)
 
-        self.size = size
-        self.data = []
-        self.target = None
+        self.size = image_size
+        self.patch_size = patch_size
+        self.road_threshold = road_threshold
 
-        images = os.listdir(data_path)
-        images.sort()
+        self.images = []
+        self.masks = None
 
-        for image_name in images:
+        image_names = os.listdir(data_path)
+        image_names.sort()
+
+        for image_name in image_names:
             image_path = os.path.join(data_path, image_name)
-            image = torchvision.io.read_image(image_path)
 
-            self.data.append(image.float())
+            # Read the image as a tensor and scale it
+            image = torchvision.io.read_image(image_path)
+            image = self._scale(image)
+
+            self.images.append(image)
 
         if target_path is not None:
-            self.target = []
+            self.masks = []
 
             masks = os.listdir(target_path)
             masks.sort()
@@ -50,17 +53,16 @@ class ContextRoadDataset(Dataset):
             for mask_name in masks:
                 mask_path = os.path.join(target_path, mask_name)
 
-                # Read the mask as a grayscale image
+                # Read the mask as a grayscale image and scale it
                 mode = torchvision.io.ImageReadMode.GRAY
                 mask = torchvision.io.read_image(mask_path, mode)
+                mask = self._scale(mask)
 
-                self.target.append(mask.float())
+                self.masks.append(mask)
 
-            assert len(self.data) == len(
-                self.target
-            ), "Data and target should have the same length."
+            assert len(self.images) == len(self.masks)
 
-        self._index = list(range(len(self.data)))
+        self._index = list(range(len(self.images)))
 
         if shuffle:
             random.shuffle(self._index)
@@ -81,27 +83,39 @@ class ContextRoadDataset(Dataset):
                 (a single dataset element).
         """
         data_index = self._index[index]
-        data = self.data[data_index]
+        image = self.images[data_index]
 
         # Crop the image to the desired size
-        data = self._process_image(data)
+        image = self._process_image(image)
 
-        instance_data = {"img": data}
+        instance = {"img": image}
 
-        if self.target is not None:
-            target = self.target[data_index]
-            target = self._process_image(target)
-            target = self._create_target(target)
+        if self.masks is not None:
+            mask = self.masks[data_index]
+            mask = self._process_image(mask)
+            target = self._create_target(mask)
 
-            instance_data["labels"] = target
+            instance["mask"] = mask
+            instance["labels"] = target
 
-        return instance_data
+        return instance
 
     def __len__(self):
         """
         Get length of the dataset (length of the index).
         """
         return len(self._index)
+
+    def _scale(self, image: torch.Tensor) -> torch.Tensor:
+        """
+        Scale the image to [0, 1].
+
+        Args:
+            image (Tensor): input image.
+        Returns:
+            image (Tensor): scaled image.
+        """
+        return image / 255.0
 
     def _process_image(self, image: torch.Tensor) -> torch.Tensor:
         """
@@ -128,20 +142,20 @@ class ContextRoadDataset(Dataset):
 
         # Create a patch size kernel of ones to convolve with the mask
         # The kernel has one batch and one channel dimension
-        kernel = torch.ones(1, 1, self.PATCH_SIZE, self.PATCH_SIZE)
+        kernel = torch.ones(1, 1, self.patch_size, self.patch_size)
 
         # Add batch dimension to the mask
         mask = mask.unsqueeze(0)
 
         # Convolve the mask with the kernel to get the number of roads in the patch
         with torch.no_grad():
-            roads = torch.nn.functional.conv2d(mask, kernel, stride=self.PATCH_SIZE)
+            roads = torch.nn.functional.conv2d(mask, kernel, stride=self.patch_size)
 
         # Remove batch and channel dimension
         roads = roads.squeeze()
 
         # Threshold the number of roads to get the target
-        threshold = self.ROAD_THRESHOLD * self.PATCH_SIZE**2
+        threshold = self.road_threshold * self.patch_size**2
         target = roads > threshold
 
         # Flatten and convert to float
