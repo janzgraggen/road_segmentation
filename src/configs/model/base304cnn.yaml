@@ -1,2 +1,2 @@
-_target_: src.model.PixelClassifier
+_target_: src.model.Base304cnn
 fc_hidden: 512

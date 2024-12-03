@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 
-class BceLoss(nn.Module):
+class BinaryCrossEntropyLoss(nn.Module):
     """
     Wrapper over PyTorch CrossEntropyLoss
     """

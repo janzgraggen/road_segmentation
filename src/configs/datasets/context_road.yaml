@@ -1,0 +1,5 @@
+train:
+  _target_: src.datasets.ContextRoadDataset
+  size: 304
+  data_path: "road_data/train/images"
+  target_path: "road_data/train/groundtruth"

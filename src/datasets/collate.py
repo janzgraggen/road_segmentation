@@ -20,6 +20,8 @@ def collate_fn(dataset_items: list[dict]):
     result_batch["img"] = torch.cat(
         [elem["img"].unsqueeze(0) for elem in dataset_items], dim=0
     )
-    result_batch["labels"] = torch.tensor([elem["labels"] for elem in dataset_items])
+    result_batch["labels"] = torch.cat(
+        [elem["labels"].unsqueeze(0) for elem in dataset_items], dim=0
+    )
 
     return result_batch
