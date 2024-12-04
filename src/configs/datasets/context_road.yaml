@@ -1,7 +1,4 @@
 train:
   _target_: src.datasets.ContextRoadDataset
-  image_size: 304
-  patch_size: 16
-  road_threshold: 0.25
   data_path: "road_data/train/images"
   target_path: "road_data/train/groundtruth"

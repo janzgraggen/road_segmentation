@@ -2,7 +2,6 @@ from itertools import repeat
 
 from hydra.utils import instantiate
 
-from src.datasets.collate import collate_fn
 from src.utils.init_utils import set_worker_seed
 
 
@@ -39,8 +38,7 @@ def move_batch_transforms_to_device(batch_transforms, device):
     for transform_type in batch_transforms.keys():
         transforms = batch_transforms.get(transform_type)
         if transforms is not None:
-            for transform_name in transforms.keys():
-                transforms[transform_name] = transforms[transform_name].to(device)
+            transforms.to(device)
 
 
 def get_dataloaders(config, device):
@@ -78,7 +76,6 @@ def get_dataloaders(config, device):
         partition_dataloader = instantiate(
             config.dataloader,
             dataset=dataset,
-            collate_fn=collate_fn,
             drop_last=(dataset_partition == "train"),
             shuffle=(dataset_partition == "train"),
             worker_init_fn=set_worker_seed,

@@ -26,7 +26,8 @@ class Trainer(BaseTrainer):
                 the dataloader (possibly transformed via batch transform),
                 model outputs, and losses.
         """
-        batch = self.move_batch_to_device(batch)
+        # TODO: implement the method that processes the batch, probably we don't need implement it as the dataset is already on the device...
+        # batch = self.move_batch_to_device(batch)
         batch = self.transform_batch(batch)  # transform batch on device -- faster
 
         metric_funcs = self.metrics["inference"]
