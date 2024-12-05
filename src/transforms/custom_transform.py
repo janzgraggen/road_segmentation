@@ -29,24 +29,19 @@ class CustomTransform:
         )
 
     def __call__(self, sample: dict):
-        image = sample["img"]
-        mask = sample["mask"]
-
         # Convert to Image such that the transform is applied to both
-        sample["img"] = tv_tensors.Image(image)
-        sample["mask"] = tv_tensors.Image(mask)
+        sample["img"] = tv_tensors.Image(sample["img"])
+        sample["mask"] = tv_tensors.Image(sample["mask"])
 
         # Applies the base transform to both the image and the mask
         sample = self.base_transform(sample)
 
         # Additional transforms for the image
-        image = self.image_transform(sample["img"])
-        mask = sample["mask"]
+        sample["img"] = self.image_transform(sample["img"])
 
         # Compute the target from the mask
+        mask = sample["mask"]
         target = create_target(mask, self.patch_size, self.road_threshold)
-
-        sample["img"] = image
         sample["labels"] = target
 
         return sample
