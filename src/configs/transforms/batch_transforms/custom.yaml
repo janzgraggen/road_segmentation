@@ -4,6 +4,6 @@ train:
   patch_size: 16
   road_threshold: 0.25
 
-# TODO
-# inference:
-
+test:
+  _target_: src.transforms.BaselineTransform
+  road_threshold: 0.25

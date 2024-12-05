@@ -29,3 +29,31 @@ def create_target(
     target = roads > threshold
 
     return target.flatten(1).float()
+
+
+def reconstruct(images: list[torch.Tensor], grid_size: int) -> torch.Tensor:
+    """
+    Reconstructs the images into from a grid of cells.
+
+    Args:
+        images (list[torch.Tensor]): list of images.
+        grid_size (int): size of the grid.
+
+    Returns:
+        reconstructed (torch.Tensor): reconstructed image.
+    """
+    assert len(images) == grid_size**2
+
+    rows = []
+    for row in range(grid_size):
+        columns = []
+        for col in range(grid_size):
+            index = row * grid_size + col
+            columns.append(images[index])
+
+        row = torch.cat(columns, dim=-1)
+        rows.append(row)
+
+    reconstructed = torch.cat(rows, dim=-2)
+
+    return reconstructed

@@ -4,6 +4,7 @@ import torch
 import torchvision.io
 
 from src.datasets.grid_road_dataset import GridRoadDataset
+from src.utils.train_utils import reconstruct
 
 IMAGE_SIZE = 400
 CELL_SIZE = 100
@@ -15,22 +16,6 @@ GRID_LINE_COLOR = "red"
 
 INDEX = 1
 CELL_INDEX = 5
-
-
-def reconstruct(images, grid_size):
-    rows = []
-    for row in range(grid_size):
-        columns = []
-        for col in range(grid_size):
-            index = row * grid_size + col
-            columns.append(images[index])
-
-        row = torch.cat(columns, dim=2)
-        rows.append(row)
-
-    reconstructed = torch.cat(rows, dim=1)
-
-    return reconstructed
 
 
 if __name__ == "__main__":
