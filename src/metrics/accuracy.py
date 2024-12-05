@@ -9,6 +9,7 @@ class AccuracyMetric(BaseMetric):
         Accuracy Metric
         """
         super().__init__(*args, **kwargs)
+        self.threshold = 0.5
 
     def __call__(self, logits: torch.Tensor, labels: torch.Tensor, **kwargs):
         """
@@ -20,8 +21,7 @@ class AccuracyMetric(BaseMetric):
         Returns:
             accuracy (float): calculated metric.
         """
-        # print("logits", logits)
-        # print("labels", labels)
-        classes = logits.argmax(dim=-1)
-        labels = labels.argmax(dim=-1)
-        return (classes == labels).mean(dtype=torch.float32)
+
+        logits = torch.nn.functional.softmax(logits, dim=1)
+        logits = logits > self.threshold
+        return (logits == labels).mean(dtype=torch.float32)

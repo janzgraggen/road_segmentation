@@ -4,36 +4,32 @@ from torch.nn import Sequential
 
 class CNN2Layer(nn.Module):
     """
-        CNN model for full images.
-        takes in (3xin_size x in_size) images and 
-        outputs a flattend (out_size x out_size) = (out^2,) array of logits ().
+    CNN model for full images.
+    takes in (3xin_size x in_size) images and
+    outputs a flattend (out_size x out_size) = (out^2,) array of logits ().
     """
 
     def __init__(
-            self,
-            out_dim, 
-            fc_hidden,
-
-            out_channels1,
-            kernel1,
-            stride1,
-            padding1,
-            bias1,
-
-            pool1_kernel,
-            pool1_stride,
-            pool1_padding,
-
-            out_channels2,
-            kernel2,
-            stride2,
-            padding2,
-            bias2,
-            
-            ):
+        self,
+        out_dim,
+        fc_hidden,
+        out_channels1,
+        kernel1,
+        stride1,
+        padding1,
+        bias1,
+        pool1_kernel,
+        pool1_stride,
+        pool1_padding,
+        out_channels2,
+        kernel2,
+        stride2,
+        padding2,
+        bias2,
+    ):
         """
         Args:
-            out_dim (int): output dimension.  
+            out_dim (int): output dimension.
             fc_hidden (int): hidden layer dimension.
 
             out_channels1 (int): number of output channels in the first convolutional layer.
@@ -52,24 +48,24 @@ class CNN2Layer(nn.Module):
             padding2 (int): padding in the second convolutional layer.
             bias2 (bool): bias in the second convolutional layer.
         """
-        #for example: 
-            #out_dim = 19 
-            #fc_hidden = 512
-            #out_channels1 = 64
-            #kernel1 = 10
-            #stride1 = 1
-            #padding1 = 1
-            #bias1 = False
+        # for example:
+        # out_dim = 19
+        # fc_hidden = 512
+        # out_channels1 = 64
+        # kernel1 = 10
+        # stride1 = 1
+        # padding1 = 1
+        # bias1 = False
 
-            #pool1_kernel = 2
-            #pool1_stride = 2
-            #pool1_padding = 0
+        # pool1_kernel = 2
+        # pool1_stride = 2
+        # pool1_padding = 0
 
-            #out_channels2 = 128
-            #kernel2 = 10
-            #stride2 = 1
-            #padding2 = 1
-            #bias2 = False
+        # out_channels2 = 128
+        # kernel2 = 10
+        # stride2 = 1
+        # padding2 = 1
+        # bias2 = False
 
         super(CNN2Layer, self).__init__()
 
@@ -83,7 +79,7 @@ class CNN2Layer(nn.Module):
             kernel_size=kernel1,
             stride=stride1,
             padding=padding1,
-            bias= bias1,
+            bias=bias1,
         )
 
         # batch normalization 1
@@ -91,11 +87,8 @@ class CNN2Layer(nn.Module):
 
         # input is 64x297x297, output is 64x148x148
         self.pool1 = nn.MaxPool2d(
-            kernel_size=pool1_kernel, 
-            stride=pool1_stride, 
-            padding=pool1_padding)
-
-
+            kernel_size=pool1_kernel, stride=pool1_stride, padding=pool1_padding
+        )
 
         # input is 64x148x148, output is  128x141x141
         self.conv2 = nn.Conv2d(

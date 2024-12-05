@@ -12,6 +12,7 @@ class BaseMetric:
             name (str | None): metric name to use in logger and writer.
         """
         self.name = name if name is not None else type(self).__name__
+        self.threshold = 0.5
 
     @abstractmethod
     def __call__(self, **batch):
