@@ -1,4 +1,0 @@
-test:
-  _target_: src.datasets.RoadDataset
-  name: "test"
-  instance_transforms: ${transforms.instance_transforms.inference}

@@ -1,4 +1,0 @@
-train:
-  _target_: src.datasets.RoadDataset
-  name: "train"
-  instance_transforms: ${transforms.instance_transforms.train}
