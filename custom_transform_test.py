@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.datasets.context_road_dataset import ContextRoadDataset
+from src.datasets.image_road_dataset import ImageRoadDataset
 from src.transforms.custom_transform import CustomTransform
 
 IMAGE_SIZE = 304
@@ -15,7 +15,7 @@ INDEX = 0
 PATCH_LINE_COLOR = "red"
 
 if __name__ == "__main__":
-    dataset = ContextRoadDataset(DATA_PATH, TARGET_PATH)
+    dataset = ImageRoadDataset(DATA_PATH, TARGET_PATH)
 
     data = dataset[INDEX]
 

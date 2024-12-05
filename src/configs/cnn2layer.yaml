@@ -2,7 +2,7 @@ defaults:
   - model: CNN2Layer
   - writer: tensorboard 
   - metrics: accuracy
-  - datasets: context_road 
+  - datasets: image_road 
   - dataloader: main
   - transforms: main
   - _self_

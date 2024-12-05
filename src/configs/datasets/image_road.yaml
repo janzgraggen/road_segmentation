@@ -1,4 +1,4 @@
 train:
-  _target_: src.datasets.ContextRoadDataset
+  _target_: src.datasets.ImageRoadDataset
   data_path: "road_data/train/images"
   target_path: "road_data/train/groundtruth"
