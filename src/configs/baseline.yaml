@@ -14,11 +14,7 @@ lr_scheduler:
   gamma: 0.9
   step_size: ${trainer.epoch_len}
 loss_function:
-<<<<<<< HEAD
-  _target_: src.loss.CELoss
-=======
   _target_: src.loss.BinaryCrossEntropyLoss
->>>>>>> refs/remotes/origin/main
 trainer:
   log_step: 50
   n_epochs: 10 
