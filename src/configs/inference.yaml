@@ -6,6 +6,9 @@ defaults:
   - transforms: main
   - _self_
 inferencer:
+  nbr_imgs: 50
+  img_size: 608
+  crop_size: 304
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"
   save_path: "road" # any name here, can be a dataset name

@@ -13,9 +13,11 @@ from src.utils.io_utils import ROOT_PATH
 def main(config):
     save_path = ROOT_PATH / "data" / "saved" / config.inferencer.save_path / "test"
     submission = []
-    NBR_IMGS = 50
-    IMGSIZE = 608  
-    CROP_SIZE = 304 #16
+    
+    NBR_IMGS = config.inferencer.nbr_imgs #50
+    IMGSIZE = config.inferencer.img_size #608
+    CROP_SIZE =   config.inferencer.crop_size #304
+
     assert(IMGSIZE % CROP_SIZE == 0)
     assert(CROP_SIZE % 16 == 0)
     PREDICT_SIZE = CROP_SIZE/16 # 19 , #1 
