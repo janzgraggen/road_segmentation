@@ -22,18 +22,21 @@ class BaselineTransform:
     def __call__(self, sample: dict):
         # Convert to Image such that the transform is applied to both
         sample["img"] = tv_tensors.Image(sample["img"])
-        sample["mask"] = tv_tensors.Image(sample["mask"])
+
+        if "mask" in sample:
+            sample["mask"] = tv_tensors.Image(sample["mask"])
 
         # Applies the transform to both the image and the mask
         sample = self.transform(sample)
 
-        # Compute the target from the mask
-        mask = sample["mask"]
-        roads = mask.mean(dim=(1, 2, 3))  # Mean over all dimensions except batch
-        target = (roads > self.road_threshold).float()
-        target = target.reshape(-1, 1)  # Reshape to (batch_size, 1)
+        if "mask" in sample:
+            # Compute the target from the mask
+            mask = sample["mask"]
+            roads = mask.mean(dim=(1, 2, 3))  # Mean over all dimensions except batch
+            target = (roads > self.road_threshold).float()
+            target = target.reshape(-1, 1)  # Reshape to (batch_size, 1)
 
-        sample["labels"] = target
+            sample["labels"] = target
 
         return sample
 
