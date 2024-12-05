@@ -57,7 +57,8 @@ def main(config):
             transformed = transform(batch)
             output = model(transformed["img"])
             logits = output["logits"]
-            prediction = logits > 0.5  # TODO: Get this value from the config...
+            proba = torch.nn.functional.sigmoid(logits)
+            prediction = proba > 0.5  # TODO: Get this value from the config...
             predictions.append(prediction.int())
 
     # Concatenate the predictions

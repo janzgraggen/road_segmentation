@@ -22,6 +22,6 @@ class AccuracyMetric(BaseMetric):
             accuracy (float): calculated metric.
         """
 
-        logits = torch.nn.functional.softmax(logits, dim=1)
-        logits = logits > self.threshold
-        return (logits == labels).mean(dtype=torch.float32)
+        proba = torch.nn.functional.sigmoid(logits)
+        predictions = proba > self.threshold
+        return (predictions == labels).mean(dtype=torch.float32)
