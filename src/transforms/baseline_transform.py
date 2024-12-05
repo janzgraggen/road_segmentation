@@ -17,7 +17,7 @@ class BaselineTransform:
 
     def __init__(self, road_threshold: float):
         self.road_threshold = road_threshold
-        self.transform = (transforms.ToDtype(torch.float32, scale=True),)
+        self.transform = transforms.ToDtype(torch.float32, scale=True)
 
     def __call__(self, sample: dict):
         # Convert to Image such that the transform is applied to both
@@ -29,10 +29,11 @@ class BaselineTransform:
 
         # Compute the target from the mask
         mask = sample["mask"]
-        if mask.mean() > self.road_threshold:
-            sample["labels"] = torch.tensor([1.0], device=mask.device)
-        else:
-            sample["labels"] = torch.tensor([0.0], device=mask.device)
+        roads = mask.mean(dim=(1, 2, 3))  # Mean over all dimensions except batch
+        target = (roads > self.road_threshold).float()
+        target = target.reshape(-1, 1)  # Reshape to (batch_size, 1)
+
+        sample["labels"] = target
 
         return sample
 

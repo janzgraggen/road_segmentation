@@ -2,7 +2,7 @@ defaults:
   - model: baseline 
   - writer: tensorboard 
   - metrics: accuracy
-  - datasets: road 
+  - datasets: baseline
   - dataloader: main
   - transforms: main
   - _self_
@@ -14,7 +14,7 @@ lr_scheduler:
   gamma: 0.9
   step_size: ${trainer.epoch_len}
 loss_function:
-  _target_: src.loss.WeightedBCELoss
+  _target_: src.loss.BinaryCrossEntropyLoss
 trainer:
   log_step: 50
   n_epochs: 10 

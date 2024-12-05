@@ -4,25 +4,25 @@ from torch.nn import Sequential
 
 class BaselineModel(nn.Module):
     """
-    Simple MLP
+    Simple MLP model with one hidden layer which takes a single patch and
+    predicts if it's a road patch or not.
+
+    Args:
+        patch_size (int): size of the patch.
+        hidden (int): number of hidden features.
     """
 
-    def __init__(self, n_feats, n_class, fc_hidden=512):
-        """
-        Args:
-            n_feats (int): number of input features.
-            n_class (int): number of classes.
-            fc_hidden (int): number of hidden features.
-        """
+    def __init__(self, patch_size, hidden=512):
         super().__init__()
 
+        input_size = 3 * patch_size * patch_size
+
         self.net = Sequential(
-            # people say it can approximate any function...
-            nn.Linear(in_features=n_feats, out_features=fc_hidden),
+            nn.Linear(in_features=input_size, out_features=hidden),
             nn.ReLU(),
-            nn.Linear(in_features=fc_hidden, out_features=fc_hidden),
+            nn.Linear(in_features=hidden, out_features=hidden),
             nn.ReLU(),
-            nn.Linear(in_features=fc_hidden, out_features=n_class),
+            nn.Linear(in_features=hidden, out_features=1),
         )
 
     def forward(self, img, **batch):

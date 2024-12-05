@@ -1,4 +1,3 @@
 _target_: src.model.BaselineModel
-n_feats: 768 
-fc_hidden: 512
-n_class: 2 
+patch_size: 16
+hidden: 512
