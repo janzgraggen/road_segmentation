@@ -36,6 +36,8 @@ def main(config):
     model.to(device)
     model.eval()
 
+    print("Model loaded successfully")
+
     # Get the image and patch size
     image_size = config.datasets.test.image_size
     patch_size = state_config.model.patch_size
@@ -50,6 +52,7 @@ def main(config):
     dataloader = dataloaders["test"]
     transform = batch_transforms["test"]
 
+    print("Starting inference...")
     # Run inference
     predictions = []
     with torch.no_grad():

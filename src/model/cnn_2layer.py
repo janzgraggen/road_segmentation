@@ -11,6 +11,7 @@ class CNN2Layer(nn.Module):
 
     def __init__(
         self,
+        patch_size,
         out_dim,
         fc_hidden,
         out_channels1,
