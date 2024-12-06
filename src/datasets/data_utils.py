@@ -69,10 +69,10 @@ def get_dataloaders(config, device):
         dataset = datasets[dataset_partition]
         dataset.to(device)
 
-        assert config.dataloader.batch_size <= len(dataset), (
-            f"The batch size ({config.dataloader.batch_size}) cannot "
-            f"be larger than the dataset length ({len(dataset)})"
-        )
+        # if the dataset is smaller than the batch size, reduce the batch size
+        if len(dataset) < config.dataloader.batch_size:
+            config.dataloader.batch_size = len(dataset)
+            print(f"Reduced batch size to {config.dataloader.batch_size}")
 
         partition_dataloader = instantiate(
             config.dataloader,

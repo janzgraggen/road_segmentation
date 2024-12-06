@@ -21,9 +21,6 @@ def create_target(
     with torch.no_grad():
         roads = torch.nn.functional.conv2d(mask, kernel, stride=patch_size)
 
-    # Remove batch and channel dimension
-    roads = roads.squeeze()
-
     # Threshold the number of roads to get the target
     threshold = road_threshold * patch_size**2
     target = roads > threshold

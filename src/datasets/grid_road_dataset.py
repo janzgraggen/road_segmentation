@@ -28,6 +28,10 @@ class GridRoadDataset(ImageRoadDataset):
         data_path: str,
         target_path: str | None = None,
     ):
+        # Round the image size to the nearest multiple of the cell size
+        image_size = (image_size // cell_size) * cell_size
+        print(f"Rounded image size to {image_size}")
+
         assert image_size % cell_size == 0
 
         super().__init__(data_path, target_path)

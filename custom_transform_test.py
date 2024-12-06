@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     data = dataset[INDEX]
 
-    transform = CustomTransform(IMAGE_SIZE, PATCH_SIZE, ROAD_THRESHOLD)
+    transform = CustomTransform(IMAGE_SIZE, ROAD_THRESHOLD)
     data = transform(data)
 
     image = data["img"]

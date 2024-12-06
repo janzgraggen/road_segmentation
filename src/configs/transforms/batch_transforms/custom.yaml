@@ -1,7 +1,10 @@
 train:
   _target_: src.transforms.CustomTransform
-  image_size: 304
-  patch_size: 16
+  patch_size: ${model.patch_size}
+  road_threshold: 0.25
+
+inference:
+  _target_: src.transforms.BaselineTransform
   road_threshold: 0.25
 
 test:
