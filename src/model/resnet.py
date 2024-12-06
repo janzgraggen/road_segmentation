@@ -1,78 +1,93 @@
 import torch.nn as nn
 
 
+# Define Residual Block
 class ResidualBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride=1, downsample=None):
+    def __init__(self, in_channels, out_channels, stride=1):
         super(ResidualBlock, self).__init__()
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(
-                in_channels, out_channels, kernel_size=3, stride=stride, padding=1
-            ),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(),
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(out_channels),
-        )
-        self.downsample = downsample
-        self.relu = nn.ReLU()
-        self.out_channels = out_channels
 
-    def forward(self, x, **batch):
+        self.conv1 = nn.Conv2d(
+            in_channels,
+            out_channels,
+            kernel_size=3,
+            stride=stride,
+            padding=1,
+            bias=False,
+        )
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU(inplace=True)
+
+        self.conv2 = nn.Conv2d(
+            out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False
+        )
+        self.bn2 = nn.BatchNorm2d(out_channels)
+
+        # Shortcut connection to handle different input/output dimensions
+        self.shortcut = nn.Sequential()
+
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(
+                    in_channels, out_channels, kernel_size=1, stride=stride, bias=False
+                ),
+                nn.BatchNorm2d(out_channels),
+            )
+
+    def forward(self, x):
         residual = x
+
         out = self.conv1(x)
-        out = self.conv2(out)
-        if self.downsample:
-            residual = self.downsample(x)
-        out += residual
+        out = self.bn1(out)
         out = self.relu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+
+        out += self.shortcut(residual)
+        out = self.relu(out)
+
         return out
 
 
+# Define ResNet101v2 model
 class ResNet(nn.Module):
-    def __init__(self, layers):
-        num_classes = 1
-        block = ResidualBlock
+    def __init__(self, patch_size):
         super(ResNet, self).__init__()
-        self.inplanes = 64
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-        )
+
+        assert patch_size % 16 == 0, "Patch size must be a multiple of 16"
+        out_dim = patch_size // 16
+
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer0 = self._make_layer(block, 64, layers[0], stride=1)
-        self.layer1 = self._make_layer(block, 128, layers[1], stride=2)
-        self.layer2 = self._make_layer(block, 256, layers[2], stride=2)
-        self.layer3 = self._make_layer(block, 512, layers[3], stride=2)
-        self.avgpool = nn.AvgPool2d(7, strid=1)
-        self.fc = nn.Linear(512, num_classes)
+
+        self.layer1 = self._make_layer(64, 64, 3, 1)
+        self.layer2 = self._make_layer(64, 128, 4, 2)
+        self.layer3 = self._make_layer(128, 256, 23, 2)
+        self.layer4 = self._make_layer(256, 512, 3, 2)
+
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.fc = nn.Linear(512, out_dim**2)
 
         self.net = nn.Sequential(
             self.conv1,
+            self.bn1,
+            self.relu,
             self.maxpool,
-            self.layer0,
             self.layer1,
             self.layer2,
             self.layer3,
+            self.layer4,
             self.avgpool,
+            nn.Flatten(),
             self.fc,
         )
 
-    def _make_layer(self, block, planes, blocks, stride=1):
-        downsample = None
-        if stride != 1 or self.inplanes != planes:
-            downsample = nn.Sequential(
-                nn.Conv2d(self.inplanes, planes, kernel_size=1, stride=stride),
-                nn.BatchNorm2d(planes),
-            )
-        layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample))
-        self.inplanes = planes
-        for i in range(1, blocks):
-            layers.append(block(self.inplanes, planes))
-
+    def _make_layer(self, in_channels, out_channels, blocks, stride):
+        layers = [ResidualBlock(in_channels, out_channels, stride)]
+        for _ in range(1, blocks):
+            layers.append(ResidualBlock(out_channels, out_channels, stride=1))
         return nn.Sequential(*layers)
 
     def forward(self, img, **batch):

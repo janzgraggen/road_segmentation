@@ -1,7 +1,7 @@
 defaults:
   - model: resnet 
   - writer: tensorboard 
-  - metrics: [accuracy, f1]
+  - metrics: metrics 
   - datasets: image_road 
   - dataloader: main
   - transforms: custom 
@@ -18,7 +18,7 @@ loss_function:
 trainer:
   log_step: 50
   n_epochs: 10 
-  epoch_len: 500
+  epoch_len: 10
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"

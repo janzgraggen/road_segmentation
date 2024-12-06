@@ -48,7 +48,9 @@ def main(config):
 
     # Get the dataloaders and batch transforms
     config.datasets.test.cell_size = patch_size
+    print("Getting dataloaders...")
     dataloaders, batch_transforms = get_dataloaders(config, device)
+    print("Dataloaders loaded successfully")
 
     dataloader = dataloaders["test"]
     transform = batch_transforms["test"]
