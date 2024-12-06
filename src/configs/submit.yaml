@@ -1,7 +1,7 @@
 defaults:
   - datasets: test
   - dataloader: main
-  - transforms: custom 
+  - transforms: main 
   - _self_
 
 state_dir: "saved/testing"

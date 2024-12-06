@@ -1,5 +1,5 @@
 test:
   _target_: src.datasets.GridRoadDataset
-  cell_size: 16
+  cell_size: null
   image_size: 608
   data_path: "road_data/aicrowd/"
