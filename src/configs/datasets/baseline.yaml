@@ -4,3 +4,10 @@ train:
   image_size: 400
   data_path: "road_data/train/images"
   target_path: "road_data/train/groundtruth"
+
+inference:
+  _target_: src.datasets.GridRoadDataset
+  cell_size: 16
+  image_size: 400
+  data_path: "road_data/validation/images"
+  target_path: "road_data/validation/groundtruth"
