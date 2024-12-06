@@ -47,6 +47,7 @@ def main(config):
     grid_size = image_size // patch_size
 
     # Get the dataloaders and batch transforms
+    config.datasets.test.cell_size = patch_size
     dataloaders, batch_transforms = get_dataloaders(config, device)
 
     dataloader = dataloaders["test"]
@@ -67,9 +68,7 @@ def main(config):
     # Concatenate the predictions
     predictions = torch.cat(predictions)
 
-    # If the predictions are 1D, reshape them to 2D
-    if predictions.dim() == 2:
-        predictions = predictions.reshape(-1, 1, 1)
+    predictions = predictions.reshape(-1, patch_size // 16, patch_size // 16)
 
     assert len(predictions) % (grid_size**2) == 0
 

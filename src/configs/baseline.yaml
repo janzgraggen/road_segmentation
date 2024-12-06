@@ -1,7 +1,7 @@
 defaults:
   - model: baseline 
   - writer: tensorboard 
-  - metrics: [accuracy, f1]
+  - metrics: metrics
   - datasets: baseline
   - dataloader: main
   - transforms: main
