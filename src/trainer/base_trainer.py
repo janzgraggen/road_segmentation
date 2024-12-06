@@ -77,6 +77,7 @@ class BaseTrainer:
         if epoch_len is None:
             # epoch-based training
             self.epoch_len = len(self.train_dataloader)
+            self.lr_scheduler.step_size = self.epoch_len
         else:
             # iteration-based training
             self.train_dataloader = inf_loop(self.train_dataloader)
