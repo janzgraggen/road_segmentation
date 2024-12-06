@@ -1,6 +1,6 @@
 defaults:
   - model: improved 
-  - metrics: accuracy
+  - metrics: [accuracy, f1]
   - datasets: road_test
   - dataloader: main
   - transforms: main
@@ -10,7 +10,7 @@ inferencer:
   img_size: 608
   crop_size: 304
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
-  device: auto # device name or "auto"
+  device: mps # device name or "auto"
   save_path: "road" # any name here, can be a dataset name
   seed: 1
   from_pretrained: "saved/testing/model_best.pth" # path to the pretrained model
