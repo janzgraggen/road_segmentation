@@ -2,6 +2,8 @@ import torch
 import torchvision.transforms.v2 as transforms
 import torchvision.tv_tensors as tv_tensors
 
+from src.utils.train_utils import create_target
+
 
 class BaselineTransform:
     """
@@ -32,10 +34,7 @@ class BaselineTransform:
         if "mask" in sample:
             # Compute the target from the mask
             mask = sample["mask"]
-            roads = mask.mean(dim=(1, 2, 3))  # Mean over all dimensions except batch
-            target = (roads > self.road_threshold).float()
-            target = target.reshape(-1, 1)  # Reshape to (batch_size, 1)
-
+            target = create_target(mask, 16, self.road_threshold)
             sample["labels"] = target
 
         return sample

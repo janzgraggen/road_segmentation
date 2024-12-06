@@ -1,7 +1,6 @@
 _target_: src.model.CNN2Layer
-# Input_dim/16 = out dim  (304/16 = 19)
-patch_size: 16
-out_dim: 19
+
+patch_size: 304 # size of the input image to the model
 
 # FC Layer
 fc_hidden: 512

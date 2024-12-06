@@ -6,8 +6,7 @@ from src.utils.train_utils import create_target
 
 
 class CustomTransform:
-    def __init__(self, image_size: int, patch_size: int, road_threshold: float):
-        self.patch_size = patch_size
+    def __init__(self, patch_size: int, road_threshold: float):
         self.road_threshold = road_threshold
 
         self.base_transform = transforms.Compose(
@@ -15,7 +14,7 @@ class CustomTransform:
                 transforms.RandomRotation(90),
                 transforms.RandomHorizontalFlip(),
                 transforms.RandomResizedCrop(
-                    (image_size, image_size), scale=(0.5, 1.0)
+                    (patch_size, patch_size), scale=(0.5, 1.0)
                 ),
                 transforms.ToDtype(torch.float32, scale=True),
             ]
@@ -41,7 +40,7 @@ class CustomTransform:
 
         # Compute the target from the mask
         mask = sample["mask"]
-        target = create_target(mask, self.patch_size, self.road_threshold)
+        target = create_target(mask, 16, self.road_threshold)
         sample["labels"] = target
 
         return sample

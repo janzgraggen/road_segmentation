@@ -1,10 +1,10 @@
 defaults:
-  - model: CNN2Layer
+  - model: cnn2layer
   - writer: tensorboard 
   - metrics: accuracy
   - datasets: image_road 
   - dataloader: main
-  - transforms: custom 
+  - transforms: custom
   - _self_
 optimizer:
   _target_: torch.optim.Adam

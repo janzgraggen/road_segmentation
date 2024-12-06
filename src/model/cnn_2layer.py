@@ -12,7 +12,6 @@ class CNN2Layer(nn.Module):
     def __init__(
         self,
         patch_size,
-        out_dim,
         fc_hidden,
         out_channels1,
         kernel1,
@@ -30,7 +29,7 @@ class CNN2Layer(nn.Module):
     ):
         """
         Args:
-            out_dim (int): output dimension.
+            patch_size (int): size of the input image
             fc_hidden (int): hidden layer dimension.
 
             out_channels1 (int): number of output channels in the first convolutional layer.
@@ -67,6 +66,9 @@ class CNN2Layer(nn.Module):
         # stride2 = 1
         # padding2 = 1
         # bias2 = False
+
+        assert patch_size % 16 == 0, "Patch size must be a multiple of 16"
+        out_dim = patch_size // 16
 
         super(CNN2Layer, self).__init__()
 
