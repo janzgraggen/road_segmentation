@@ -21,16 +21,16 @@ class F1Metric(BaseMetric):
             accuracy (float): calculated metric.
         """
 
-        logits = torch.nn.functional.sigmoid(logits)
-        predictions = (logits > self.threshold).type(torch.float32)
+        proba = torch.nn.functional.sigmoid(logits)
+        predictions = (proba > self.threshold).float()
 
-        true_positives = torch.sum(predictions * labels)
-        false_positives = torch.sum(predictions * (1 - labels))
-        false_negatives = torch.sum((1 - predictions) * labels)
+        tp = (predictions * labels).sum()
+        # tn = ((1 - predictions) * (1 - labels)).sum()
+        fp = (predictions * (1 - labels)).sum()
+        fn = ((1 - predictions) * labels).sum()
 
-        precision = true_positives / (true_positives + false_positives + 1e-10)
-        recall = true_positives / (true_positives + false_negatives + 1e-10)
+        precision = tp / (tp + fp + 1e-10)
+        recall = tp / (tp + fn + 1e-10)
 
-        f1 = 2 * precision * recall / (precision + recall + 1e-10)
-
+        f1 = 2 * (precision * recall) / (precision + recall + 1e-10)
         return f1
