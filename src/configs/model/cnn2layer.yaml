@@ -1,6 +1,6 @@
 _target_: src.model.CNN2Layer
 
-patch_size: 304 # size of the input image to the model
+patch_size: 16 # size of the input image to the model
 
 # FC Layer
 fc_hidden: 512
