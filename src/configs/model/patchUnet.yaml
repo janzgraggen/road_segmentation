@@ -1,0 +1,13 @@
+_target_: src.model.PatchUnet
+
+patch_size: 304
+
+in_channels: 3 
+num_classes: 1
+
+#DeSIGN:
+use_direct_stride: False  # Boolean parameter to control stride behavior
+nrChannels1: 16           # Number of channels for the first set of layers
+nrChannels2: 32           # Number of channels for the second set of layers
+nrChannels3: 64           # Number of channels for the third set of layers
+nrChannels4: 128           # Number of channels for the fourth set of layers
