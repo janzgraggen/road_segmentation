@@ -1,0 +1,10 @@
+# This should be used with the submit.py script to create a submission of the 
+# validation dataset. This is useful in combination with the visualize.py
+# script
+defaults:
+  - datasets: validation 
+  - dataloader: main
+  - transforms: main 
+  - _self_
+
+state_dir: "saved/testing"

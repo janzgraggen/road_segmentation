@@ -1,5 +1,5 @@
 test:
   _target_: src.datasets.GridRoadDataset
   cell_size: null # Will be set to the model's patch_size in the submit script
-  image_size: 608 
-  data_path: "road_data/aicrowd/"
+  image_size: 400
+  data_path: "road_data/validation/images"
