@@ -77,7 +77,7 @@ def main(config):
     # Split the predictions into images to reconstruct
     images = torch.split(predictions, grid_size**2)
 
-    assert len(images) == 50
+    assert len(images) == 50 or len(images) == 10
 
     # Reconstruct the images
     reconstructed_images = [reconstruct(image, grid_size) for image in images]
@@ -88,13 +88,8 @@ def main(config):
 
         for j, row in enumerate(image):
             for k, patch in enumerate(row):
-                id = f"{i+1:03d}_{j * 16}_{k * 16}"
+                id = f"{i+1:03d}_{k * 16}_{j * 16}"
                 submission.append([id, patch.item()])
-
-        # for w in range(38):
-        #     for h in range(38):
-        #         id = f"{i+1:03d}_{w * 16}_{h * 16}"
-        #         submission.append([id, image[h, w].item()])
 
     name = "submission.csv"
     submission_path = os.path.join(ROOT_PATH, config.state_dir, name)

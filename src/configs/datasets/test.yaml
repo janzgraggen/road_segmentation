@@ -3,3 +3,10 @@ test:
   cell_size: 16 
   image_size: 608 
   data_path: "road_data/aicrowd/"
+
+# Uncomment this if you want to create a submission for the validation set
+# test:
+#   _target_: src.datasets.GridRoadDataset
+#   cell_size: 16 
+#   image_size: 400
+#   data_path: "road_data/validation/images"
