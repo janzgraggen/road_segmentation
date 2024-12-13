@@ -53,7 +53,7 @@ class ResidualBlock(nn.Module):
 
 # Define ResNet18 Model with Dropout
 class ResNet(nn.Module):
-    def __init__(self, patch_size, dropout_rate=0.2):
+    def __init__(self, patch_size, dropout_rate=0.3):
         super(ResNet, self).__init__()
 
         assert patch_size % 16 == 0, "Patch size must be a multiple of 16"
