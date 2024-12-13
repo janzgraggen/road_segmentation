@@ -42,7 +42,7 @@ def main(config):
     image_size = config.datasets.test.image_size
     patch_size = state_config.model.patch_size
 
-    assert image_size % patch_size == 0
+    # assert image_size % patch_size == 0
 
     grid_size = image_size // patch_size
 
@@ -88,8 +88,13 @@ def main(config):
 
         for j, row in enumerate(image):
             for k, patch in enumerate(row):
-                id = f"{i+1:03d}_{k * 16}_{j * 16}"
+                id = f"{i+1:03d}_{j * 16}_{k * 16}"
                 submission.append([id, patch.item()])
+
+        # for w in range(38):
+        #     for h in range(38):
+        #         id = f"{i+1:03d}_{w * 16}_{h * 16}"
+        #         submission.append([id, image[h, w].item()])
 
     name = "submission.csv"
     submission_path = os.path.join(ROOT_PATH, config.state_dir, name)

@@ -1,2 +1,2 @@
 _target_: src.model.ResNet
-patch_size: 32 
+patch_size: 16 

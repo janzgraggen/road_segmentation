@@ -1,5 +1,10 @@
 train:
-  _target_: src.datasets.ImageRoadDataset
+  # _target_: src.datasets.ImageRoadDataset
+  # data_path: "road_data/train/images"
+  # target_path: "road_data/train/groundtruth"
+  _target_: src.datasets.GridRoadDataset
+  cell_size: ${model.patch_size}
+  image_size: 400
   data_path: "road_data/train/images"
   target_path: "road_data/train/groundtruth"
 
