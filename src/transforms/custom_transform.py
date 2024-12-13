@@ -22,11 +22,11 @@ class CustomTransform:
 
         self.image_transform = transforms.Compose(
             [
-                # transforms.GaussianNoise(),
+                transforms.GaussianNoise(),
                 transforms.Normalize(
                     mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
                 ),
-                # transforms.RandomErasing(),
+                transforms.RandomErasing(),
             ]
         )
 
