@@ -8,9 +8,9 @@ def create_target(
     Create target from mask.
 
     Args:
-        mask (torch.Tensor): binary mask of shape (H, W).
+        mask (torch.Tensor): binary mask of shape (B, C, H, W).
     Returns:
-        target (torch.Tensor): target of shape (H // patch_size, W // patch_size).
+        target (torch.Tensor): target of shape (B, H // patch_size, W // patch_size).
     """
 
     # Create a patch size kernel of ones to convolve with the mask

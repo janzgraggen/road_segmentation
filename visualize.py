@@ -29,7 +29,7 @@ def main(image_number, validation=False):
     for i in range(len(data)):
         id, label = data[i]
         img_num, width, height = map(int, id.split("_"))
-        if img_num == image_number:
+        if img_num == image_number + 1:
             w = width // patch_size
             h = height // patch_size
             pred_image[h][w] = label

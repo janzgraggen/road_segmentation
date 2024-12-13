@@ -1,6 +1,8 @@
 import logging
 import os
+import re
 
+import numpy as np
 import torch
 import torchvision.io
 from torch.utils.data import Dataset
@@ -81,8 +83,14 @@ class ImageRoadDataset(Dataset):
         else:
             mode = torchvision.io.ImageReadMode.UNCHANGED
 
-        files = os.listdir(path)
-        files.sort()
+        files = np.array(os.listdir(path))
+
+        # Extract the ids from the file names
+        ids = [int(re.search(r"\d+", file).group()) for file in files]
+
+        # Sort the files by the ids
+        order = np.argsort(ids)
+        files = files[order]
 
         images = []
 
