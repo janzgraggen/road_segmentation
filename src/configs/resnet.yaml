@@ -2,9 +2,9 @@ defaults:
   - model: resnet 
   - writer: tensorboard 
   - metrics: metrics 
-  - datasets: image_road 
+  - datasets: baseline 
   - dataloader: main
-  - transforms: crop
+  - transforms: noisy
   - _self_
 optimizer:
   _target_: torch.optim.Adam
