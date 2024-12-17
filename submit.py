@@ -40,9 +40,14 @@ def main(config):
 
     # Get the image and patch size
     image_size = config.datasets.test.image_size
-    patch_size = state_config.model.patch_size
 
-    # assert image_size % patch_size == 0
+    # # If the model doesn't specify a patch size it can handle the whole image.
+    if "patch_size" in state_config.model:
+        patch_size = state_config.model.patch_size
+    else:
+        patch_size = image_size
+
+    assert image_size % patch_size == 0
 
     grid_size = image_size // patch_size
 
