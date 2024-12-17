@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from src.datasets.image_road_dataset import ImageRoadDataset
-from src.transforms.custom_transform import CustomTransform
+from src.transforms.crop_transform import CropTransform
 
 IMAGE_SIZE = 304
 PATCH_SIZE = 16
@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     data = dataset[INDEX]
 
-    transform = CustomTransform(IMAGE_SIZE, ROAD_THRESHOLD)
+    transform = CropTransform(IMAGE_SIZE, ROAD_THRESHOLD)
     data = transform(data)
 
     image = data["img"]

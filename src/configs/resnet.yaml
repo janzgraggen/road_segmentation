@@ -4,7 +4,7 @@ defaults:
   - metrics: metrics 
   - datasets: image_road 
   - dataloader: main
-  - transforms: custom 
+  - transforms: crop
   - _self_
 optimizer:
   _target_: torch.optim.Adam
