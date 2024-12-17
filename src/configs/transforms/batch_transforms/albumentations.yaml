@@ -1,11 +1,10 @@
 train:
-  _target_: src.transforms.CustomTransform
+  _target_: src.transforms.AlbumentationsTransform
   patch_size: ${model.patch_size}
   road_threshold: 0.25
 
 inference:
   _target_: src.transforms.BaselineTransform
-  # patch_size: ${model.patch_size}
   road_threshold: 0.25
 
 test:

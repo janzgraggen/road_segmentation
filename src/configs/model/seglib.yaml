@@ -1,0 +1,4 @@
+_target_: src.model.SegLibModel
+patch_size: 304 
+arch: "unet"
+encoder: "efficientnet-b0"

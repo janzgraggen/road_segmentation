@@ -1,8 +1,8 @@
 defaults:
-  - model: resnet36 
+  - model: seglib 
   - writer: tensorboard 
   - metrics: metrics 
-  - datasets: image_road 
+  - datasets: baseline
   - dataloader: main
   - transforms: custom 
   - _self_
@@ -18,7 +18,7 @@ loss_function:
 trainer:
   log_step: 50
   n_epochs: 1000 
-  epoch_len: 200 
+  epoch_len: 1000 
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"

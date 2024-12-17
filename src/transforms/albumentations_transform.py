@@ -2,33 +2,29 @@ import albumentations as A
 import torch
 import torchvision.transforms.v2 as transforms
 import torchvision.tv_tensors as tv_tensors
+from albumentations.pytorch import ToTensorV2
 
 from src.utils.train_utils import create_target
 
 
-class CustomTransform:
+class AlbumentationsTransform:
     def __init__(self, patch_size: int, road_threshold: float):
         self.road_threshold = road_threshold
 
         self.base_transform = transforms.Compose(
             [
-                transforms.RandomVerticalFlip(),
-                transforms.RandomHorizontalFlip(),
-                transforms.RandomResizedCrop(
-                    (patch_size, patch_size), scale=(0.5, 1.0)
-                ),
-                transforms.ToDtype(torch.float32, scale=True),
+                A.VerticalFlip(p=0.5),
+                A.HorizontalFlip(p=0.5),
+                A.RandomCrop(height=patch_size, width=patch_size),
+                ToTensorV2(),
             ]
         )
 
         self.image_transform = transforms.Compose(
             [
-                # A.RandomBrightnessContrast(),
-                transforms.Normalize(
-                    mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
-                ),
-                transforms.GaussianNoise(sigma=1 / 255),
-                # transforms.RandomErasing(),
+                A.Normalize(),  # This uses the ImageNet mean and std by default
+                A.RandomBrightnessContrast(p=0.5),
+                A.GaussianBlur(p=0.5),
             ]
         )
 
