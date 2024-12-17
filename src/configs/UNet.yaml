@@ -1,10 +1,10 @@
 defaults:
-  - model: resnet36 
+  - model: UNet
   - writer: tensorboard 
-  - metrics: metrics 
-  - datasets: baseline 
+  - metrics: metrics
+  - datasets: image_road 
   - dataloader: main
-  - transforms: noisy
+  - transforms: custom
   - _self_
 optimizer:
   _target_: torch.optim.Adam
@@ -17,8 +17,8 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 trainer:
   log_step: 50
-  n_epochs: 1000 
-  epoch_len: 200 
+  n_epochs:  10 
+  epoch_len: 1000 
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"
@@ -27,4 +27,4 @@ trainer:
   save_period: 5 # checkpoint each save_period epochs in addition to the best epoch
   early_stop: ${trainer.n_epochs} # epochs for early stopping
   save_dir: "saved"
-  seed: 42368 
+  seed: 8

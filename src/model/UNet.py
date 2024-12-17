@@ -2,9 +2,10 @@ import torch
 from torch import nn
 
 
-class PatchUNet(nn.Module):
+class UNet(nn.Module):
     def __init__(
         self,
+        patch_size=304,
         in_channels=3,
         num_classes=1,
         use_direct_stride=False,  # Boolean parameter to control stride behavior
@@ -13,11 +14,11 @@ class PatchUNet(nn.Module):
         nrChannels3=64,  # Number of channels for the third set of layers
         nrChannels4=128,  # Number of channels for the fourth set of layers
     ):
-        super(PatchUNet, self).__init__()
+        super(UNet, self).__init__()
 
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        # Encoder: Each stage consists of two convolutional layers followed by pooling
+        # Encoder using nn.Sequential for each block
         self.enc1 = self._block(in_channels, nrChannels1)  # 304x304 -> 152x152
         self.enc2 = self._block(nrChannels1, nrChannels2)  # 152x152 -> 76x76
         self.enc3 = self._block(nrChannels2, nrChannels3)  # 76x76 -> 38x38
@@ -80,9 +81,9 @@ class PatchUNet(nn.Module):
             nn.ReLU(inplace=True),
         )
 
-    def forward(self, x):
-        # Encoder forward pass
-        x1 = self.enc1(x)  # 304x304x3 -> 304x304xnrChannels1
+    def forward(self, img, **batch):
+        # Encoder forward pass using sequential layers
+        x1 = self.enc1(img)  # 304x304x3 -> 304x304xnrChannels1
         x2 = self.pool(x1)  # 304 -> 152
 
         x2 = self.enc2(x2)  # 152x152 -> 152x152xnrChannels2
@@ -98,29 +99,50 @@ class PatchUNet(nn.Module):
         x_bottleneck = self.bottleneck(x5)  # 19x19xnrChannels4*2
 
         # Decoder forward pass with skip connections
-        x = self.upconv4(x_bottleneck)  # 19 -> 38
-        x = torch.cat((x, x4), dim=1)  # Concatenate skip connection
-        x = self.dec4(x)
+        img = self.upconv4(x_bottleneck)  # 19 -> 38
+        img = torch.cat((img, x4), dim=1)  # Concatenate skip connection
+        img = self.dec4(img)
 
-        x = self.upconv3(x)  # 38 -> 76
-        x = torch.cat((x, x3), dim=1)  # Concatenate skip connection
-        x = self.dec3(x)
+        img = self.upconv3(img)  # 38 -> 76
+        img = torch.cat((img, x3), dim=1)  # Concatenate skip connection
+        img = self.dec3(img)
 
-        x = self.upconv2(x)  # 76 -> 152
-        x = torch.cat((x, x2), dim=1)  # Concatenate skip connection
-        x = self.dec2(x)
+        img = self.upconv2(img)  # 76 -> 152
+        img = torch.cat((img, x2), dim=1)  # Concatenate skip connection
+        img = self.dec2(img)
 
-        x = self.upconv1(x)  # 152 -> 304
-        x = torch.cat((x, x1), dim=1)  # Concatenate skip connection
-        x = self.dec1(x)
+        img = self.upconv1(img)  # 152 -> 304
+        img = torch.cat((img, x1), dim=1)  # Concatenate skip connection
+        img = self.dec1(img)
 
         # Apply final convolutions based on the parameter
         if hasattr(self, "final_conv"):
             # Direct stride 16 convolution (304 -> 19)
-            return self.final_conv(x)
+            logits = self.final_conv(img)
         else:
             # Multiple stride 2 convolutions (304 -> 152 -> 76 -> 38 -> 19)
-            x = self.final_conv1(x)  # 304 -> 152
-            x = self.final_conv2(x)  # 152 -> 76
-            x = self.final_conv3(x)  # 76 -> 38
-            return self.final_conv4(x)  # 38 -> 19
+            logits = self.final_conv1(img)  # 304 -> 152
+            logits = self.final_conv2(logits)  # 152 -> 76
+            logits = self.final_conv3(logits)  # 76 -> 38
+            logits = self.final_conv4(logits)  # 38 -> 19
+
+        # Flatten logits to match fully connected style output
+        logits = logits.view(logits.size(0), -1)  # Flatten to (N, C * H * W)
+
+        # Return output in the same format as ResNet
+        return {"logits": logits}
+
+    def __str__(self):
+        """
+        Model prints with the number of parameters.
+        """
+        all_parameters = sum([p.numel() for p in self.parameters()])
+        trainable_parameters = sum(
+            [p.numel() for p in self.parameters() if p.requires_grad]
+        )
+
+        result_info = super().__str__()
+        result_info = result_info + f"\nAll parameters: {all_parameters}"
+        result_info = result_info + f"\nTrainable parameters: {trainable_parameters}"
+
+        return result_info

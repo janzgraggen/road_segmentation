@@ -1,0 +1,9 @@
+defaults:
+  - batch_transforms: baseline 
+  - _self_
+
+batch_transforms:
+  train:
+    _target_: src.transforms.CropTransform
+    patch_size: ${model.patch_size}
+    road_threshold: 0.25

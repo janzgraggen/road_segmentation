@@ -1,5 +1,6 @@
 from src.transforms.albumentations_transform import AlbumentationsTransform
 from src.transforms.baseline_transform import BaselineTransform
-from src.transforms.custom_transform import CustomTransform
+from src.transforms.crop_transform import CropTransform
+from src.transforms.noisy_transform import NoisyTransform
 from src.transforms.submit_transform import SubmitTransform
 from src.transforms.validation_transform import ValidationTransform

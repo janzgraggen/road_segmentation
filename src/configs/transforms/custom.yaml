@@ -1,3 +1,0 @@
-defaults:
-  - batch_transforms: custom 
-  - _self_

@@ -6,29 +6,27 @@ import torchvision.tv_tensors as tv_tensors
 from src.utils.train_utils import create_target
 
 
-class CustomTransform:
-    def __init__(self, patch_size: int, road_threshold: float):
+class NoisyTransform:
+    """Does random flips, adds random noise and does random erasing."""
+
+    def __init__(self, road_threshold: float = 0.25):
         self.road_threshold = road_threshold
 
         self.base_transform = transforms.Compose(
             [
                 transforms.RandomVerticalFlip(),
                 transforms.RandomHorizontalFlip(),
-                transforms.RandomResizedCrop(
-                    (patch_size, patch_size), scale=(0.5, 1.0)
-                ),
                 transforms.ToDtype(torch.float32, scale=True),
             ]
         )
 
         self.image_transform = transforms.Compose(
             [
-                # A.RandomBrightnessContrast(),
+                transforms.GaussianNoise(sigma=1 / 255),
+                transforms.RandomErasing(),
                 transforms.Normalize(
                     mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
                 ),
-                transforms.GaussianNoise(sigma=1 / 255),
-                # transforms.RandomErasing(),
             ]
         )
 
