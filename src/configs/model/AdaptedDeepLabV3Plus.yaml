@@ -1,8 +1,8 @@
 _target_: src.model.AdaptedDeepLabV3Plus
 
 
-patch_size: 400
+patch_size: 256
 num_classes: 1
 
-backbone: "resnet101"  # Backbone for DeepLabV3 (e.g., resnet50, resnet101)
+backbone: "resnet18"  # Backbone for DeepLabV3 (e.g., resnet50, resnet101)
 pretrained: True  # Use pretrained weights
