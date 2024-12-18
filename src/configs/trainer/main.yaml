@@ -1,5 +1,5 @@
 log_step: 50
-n_epochs: 50 
+n_epochs: 20 
 epoch_len: null # set this to a fixed value (e.g. 500) for iteration based training
 device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
 resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
