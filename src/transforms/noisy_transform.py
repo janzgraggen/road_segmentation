@@ -1,4 +1,3 @@
-import albumentations as A
 import torch
 import torchvision.transforms.v2 as transforms
 import torchvision.tv_tensors as tv_tensors
@@ -9,26 +8,40 @@ from src.utils.train_utils import create_target
 class NoisyTransform:
     """Does random flips, adds random noise and does random erasing."""
 
-    def __init__(self, road_threshold: float = 0.25):
+    def __init__(
+        self,
+        road_threshold: float = 0.25,
+        flip: bool = True,
+        noise: bool = True,
+        erasing: bool = True,
+    ):
         self.road_threshold = road_threshold
 
-        self.base_transform = transforms.Compose(
-            [
-                transforms.RandomVerticalFlip(),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToDtype(torch.float32, scale=True),
-            ]
+        base_transforms = []
+        image_transforms = []
+
+        if flip:
+            base_transforms.append(transforms.RandomVerticalFlip())
+            base_transforms.append(transforms.RandomHorizontalFlip())
+
+        base_transforms.append(transforms.ToDtype(torch.float32, scale=True))
+
+        self.base_transform = transforms.Compose(base_transforms)
+
+        if noise:
+            image_transforms.append(transforms.GaussianNoise(sigma=1 / 255))
+
+        if erasing:
+            image_transforms.append(transforms.RandomErasing())
+
+        image_transforms.append(
+            transforms.Normalize(
+                mean=(0.485, 0.456, 0.406),
+                std=(0.229, 0.224, 0.225),
+            )
         )
 
-        self.image_transform = transforms.Compose(
-            [
-                transforms.GaussianNoise(sigma=1 / 255),
-                transforms.RandomErasing(),
-                transforms.Normalize(
-                    mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
-                ),
-            ]
-        )
+        self.image_transform = transforms.Compose(image_transforms)
 
     def __call__(self, sample: dict):
         # Convert to Image such that the transform is applied to both
