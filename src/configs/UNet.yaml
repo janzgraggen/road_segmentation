@@ -1,10 +1,11 @@
 defaults:
-  - model: UNet
+  - model: unet 
   - writer: tensorboard 
   - metrics: metrics
   - datasets: image_road 
   - dataloader: main
   - transforms: custom
+  - trainer: main 
   - _self_
 optimizer:
   _target_: torch.optim.Adam
@@ -15,17 +16,5 @@ lr_scheduler:
   step_size: ${trainer.epoch_len}
 loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
-trainer:
-  log_step: 50
-  n_epochs:  5
-  epoch_len: 1000
-  device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
-  resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
-  device: mps # device name or "auto"
-  override: True # if True, will override the previous run with the same name
-  monitor: "max inference_f1" # "off" or "max/min metric_name", i.e. our goal is to maximize/minimize metric
-  save_period: 5 # checkpoint each save_period epochs in addition to the best epoch
-  early_stop: ${trainer.n_epochs} # epochs for early stopping
-  save_dir: "saved"
-  seed: 8
-   
+experiment:
+  name: unet 

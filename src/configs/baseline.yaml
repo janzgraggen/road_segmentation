@@ -18,4 +18,3 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 experiment:
   name: baseline
-

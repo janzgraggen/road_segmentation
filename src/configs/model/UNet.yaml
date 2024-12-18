@@ -13,4 +13,4 @@ nrChannels3: 32           # Number of channels for the third set of layers
 nrChannels4: 48          # Number of channels for the fourth set of layers
 drop_prob: 0.05       # Dropout probability
 
-## So far best configuration got 82.5% on the validation set
+## So far best configuration got 82.5% on the validation se unett
