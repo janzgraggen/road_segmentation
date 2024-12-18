@@ -1,2 +1,0 @@
-_target_: src.model.SegNet
-patch_size: 32 

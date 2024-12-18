@@ -9,38 +9,48 @@ class UNet(nn.Module):
         in_channels=3,
         num_classes=1,
         use_direct_stride=False,  # Boolean parameter to control stride behavior
-        nrChannels1=16,           # Number of channels for the first set of layers
-        nrChannels2=32,           # Number of channels for the second set of layers
-        nrChannels3=64,           # Number of channels for the third set of layers
-        nrChannels4=128,           # Number of channels for the fourth set of layers
-        drop_prob=0.5             # Dropout probability
+        nrChannels1=16,  # Number of channels for the first set of layers
+        nrChannels2=32,  # Number of channels for the second set of layers
+        nrChannels3=64,  # Number of channels for the third set of layers
+        nrChannels4=128,  # Number of channels for the fourth set of layers
+        drop_prob=0.5,  # Dropout probability
     ):
         super(UNet, self).__init__()
 
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # Encoder using nn.Sequential for each block
-        self.enc1 = self._block(in_channels, nrChannels1,drop_prob)  # 304x304 -> 152x152
-        self.enc2 = self._block(nrChannels1, nrChannels2,drop_prob)  # 152x152 -> 76x76
-        self.enc3 = self._block(nrChannels2, nrChannels3,drop_prob)  # 76x76 -> 38x38
-        self.enc4 = self._block(nrChannels3, nrChannels4,drop_prob)  # 38x38 -> 19x19
-        
+        self.enc1 = self._block(
+            in_channels, nrChannels1, drop_prob
+        )  # 304x304 -> 152x152
+        self.enc2 = self._block(nrChannels1, nrChannels2, drop_prob)  # 152x152 -> 76x76
+        self.enc3 = self._block(nrChannels2, nrChannels3, drop_prob)  # 76x76 -> 38x38
+        self.enc4 = self._block(nrChannels3, nrChannels4, drop_prob)  # 38x38 -> 19x19
+
         # Bottleneck
-        self.bottleneck = self._block(nrChannels4, nrChannels4*2,drop_prob)
-        
+        self.bottleneck = self._block(nrChannels4, nrChannels4 * 2, drop_prob)
+
         # Decoder: Upsampling + Skip Connections
-        self.upconv4 = nn.ConvTranspose2d(nrChannels4*2, nrChannels4, kernel_size=2, stride=2)  # 19 -> 38
+        self.upconv4 = nn.ConvTranspose2d(
+            nrChannels4 * 2, nrChannels4, kernel_size=2, stride=2
+        )  # 19 -> 38
         self.dec4 = self._block(nrChannels4 + nrChannels4, nrChannels4, drop_prob)
-        
-        self.upconv3 = nn.ConvTranspose2d(nrChannels4, nrChannels3, kernel_size=2, stride=2)  # 38 -> 76
+
+        self.upconv3 = nn.ConvTranspose2d(
+            nrChannels4, nrChannels3, kernel_size=2, stride=2
+        )  # 38 -> 76
         self.dec3 = self._block(nrChannels3 + nrChannels3, nrChannels3, drop_prob)
-        
-        self.upconv2 = nn.ConvTranspose2d(nrChannels3, nrChannels2, kernel_size=2, stride=2)  # 76 -> 152
+
+        self.upconv2 = nn.ConvTranspose2d(
+            nrChannels3, nrChannels2, kernel_size=2, stride=2
+        )  # 76 -> 152
         self.dec2 = self._block(nrChannels2 + nrChannels2, nrChannels2, drop_prob)
-        
-        self.upconv1 = nn.ConvTranspose2d(nrChannels2, nrChannels1, kernel_size=2, stride=2)  # 152 -> 304
+
+        self.upconv1 = nn.ConvTranspose2d(
+            nrChannels2, nrChannels1, kernel_size=2, stride=2
+        )  # 152 -> 304
         self.dec1 = self._block(nrChannels1 + nrChannels1, nrChannels1, drop_prob)
-        
+
         # Final output layer with patch-level prediction
         if use_direct_stride:
             # Direct stride 16 convolution (304 -> 19)
@@ -65,14 +75,14 @@ class UNet(nn.Module):
                 nrChannels1, num_classes, kernel_size=3, stride=2, padding=1
             )  # 38 -> 19
 
-    def _block(self, in_channels, out_channels,dropout_prob):
+    def _block(self, in_channels, out_channels, dropout_prob):
         """Defines a block with two convolutions and ReLU activations."""
         return nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1),
             nn.ReLU(inplace=True),
-            nn.Dropout(p=dropout_prob)  # Dropout added
+            nn.Dropout(p=dropout_prob),  # Dropout added
         )
 
     def forward(self, img, **batch):

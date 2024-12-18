@@ -1,2 +1,0 @@
-_target_: src.model.SegCNN
-patch_size: 304 

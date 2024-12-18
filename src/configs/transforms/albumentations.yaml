@@ -1,3 +1,0 @@
-defaults:
-  - batch_transforms: albumentations 
-  - _self_
