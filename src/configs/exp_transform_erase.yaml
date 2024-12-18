@@ -1,0 +1,7 @@
+
+defaults:
+  - exp_patch_400
+  - override transforms: erase
+
+experiment:
+  name: exp_transform_erase

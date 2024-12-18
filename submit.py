@@ -16,17 +16,14 @@ def main(config):
     name = "model_best.pth"
     path = os.path.join(ROOT_PATH, config.state_dir, name)
 
+    # Set the device
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
     # Load the best model state
     print(f"Loading model state from {path}")
-    state = torch.load(path, weights_only=False)
+    state = torch.load(path, weights_only=False, map_location=device)
 
     state_config = state["config"]
-
-    # Set the device
-    if state_config.trainer.device == "auto":
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-    else:
-        device = state_config.trainer.device
 
     print(f"Using device: {device}")
 
@@ -69,7 +66,7 @@ def main(config):
             output = model(transformed["img"])
             logits = output["logits"]
             proba = torch.nn.functional.sigmoid(logits)
-            prediction = proba > 0.5  # TODO: Get this value from the config...
+            prediction = proba > config.threshold
             predictions.append(prediction.int())
 
     # Concatenate the predictions

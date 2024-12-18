@@ -1,0 +1,8 @@
+
+defaults:
+  - exp_patch_400
+  - override transforms: noisy
+
+
+experiment:
+  name: exp_transform_noisy
