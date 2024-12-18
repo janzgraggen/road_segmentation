@@ -33,6 +33,8 @@ def main(config):
     else:
         device = config.trainer.device
 
+    print(f"Using device {device}")
+
     # setup data_loader instances
     # batch_transforms should be put on device
     dataloaders, batch_transforms = get_dataloaders(config, device)
