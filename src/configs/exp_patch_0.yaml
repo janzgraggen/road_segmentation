@@ -1,5 +1,5 @@
 defaults:
-  - model: unet 
+  - model: unet_small
   - writer: tensorboard 
   - metrics: metrics
   - dataloader: main
