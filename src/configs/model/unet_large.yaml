@@ -11,6 +11,6 @@ nrChannels1: 32           # Number of channels for the first set of layers
 nrChannels2: 64          # Number of channels for the second set of layers
 nrChannels3: 128           # Number of channels for the third set of layers
 nrChannels4: 256         # Number of channels for the fourth set of layers
-drop_prob: 0.05       # Dropout probability
+drop_prob: 0.2       # Dropout probability
 
 ## So far best configuration got 82.5% on the validation se unett
