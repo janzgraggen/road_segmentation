@@ -1,0 +1,11 @@
+defaults:
+  - batch_transforms: baseline 
+  - _self_
+
+batch_transforms:
+  train:
+    _target_: src.transforms.NoisyTransform
+    flip: False
+    erasing: True 
+    noise: False 
+    road_threshold: 0.25
