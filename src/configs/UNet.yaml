@@ -17,8 +17,8 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 trainer:
   log_step: 50
-  n_epochs:  10 
-  epoch_len: 1000 
+  n_epochs:  5
+  epoch_len: 1000
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"
@@ -28,3 +28,4 @@ trainer:
   early_stop: ${trainer.n_epochs} # epochs for early stopping
   save_dir: "saved"
   seed: 8
+   
