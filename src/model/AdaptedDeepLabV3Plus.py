@@ -9,7 +9,7 @@ class AdaptedDeepLabV3Plus(nn.Module):
         num_classes=1,  # Number of output classes
         backbone="resnet101",  # Backbone for DeepLabV3 (e.g., resnet50, resnet101)
         pretrained=True,  # Use pretrained weights
-        patch_size=304,  # Expected input size
+        patch_size=256,  # Expected input size
     ):
         super(AdaptedDeepLabV3Plus, self).__init__()
 
@@ -23,10 +23,10 @@ class AdaptedDeepLabV3Plus(nn.Module):
         else:
             raise ValueError("Unsupported backbone. Choose 'resnet50' or 'resnet101'.")
 
-        # Adjust DeepLabV3 to handle 304x304 input size
-        self.deeplab.backbone.conv1 = nn.Conv2d(
-            3, 64, kernel_size=7, stride=2, padding=3, bias=False
-        )  # First layer to adapt to 304x304
+        # # Adjust DeepLabV3 to handle 304x304 input size
+        # self.deeplab.backbone.conv1 = nn.Conv2d(
+        #     3, 64, kernel_size=7, stride=2, padding=3, bias=False
+        # )  # First layer to adapt to 304x304
 
         # Modify the classifier to output the desired number of classes
         self.deeplab.classifier[4] = nn.Conv2d(256, num_classes, kernel_size=1)
@@ -48,19 +48,20 @@ class AdaptedDeepLabV3Plus(nn.Module):
             nn.Conv2d(
                 num_classes, num_classes, kernel_size=3, stride=2, padding=1
             ),  # 32 -> 16
+            nn.Flatten(),
         )
 
-        self.upsample = nn.Upsample(
-            size=(19, 19), mode="bilinear", align_corners=False
-        )  # Upsample to 19x19
+        # self.upsample = nn.Upsample(
+        #     size=(patch_size/16, patch_size/16), mode="bilinear", align_corners=False
+        # )  # Upsample to 19x19
 
     def forward(self, img, **batch):
         # Forward pass through DeepLabV3
         x = self.deeplab(img)["out"]  # Extract the output logits
 
         # Pass the logits through additional convolutional layers
-        logits = self.extra_convs(x)  # Maintain logits without flattening
-        logits = self.upsample(logits)  # Upsample to 19x19
+        logits = self.extra_convs(x)  
+        
 
         return {"logits": logits}
 

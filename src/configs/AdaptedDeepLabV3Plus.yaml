@@ -4,7 +4,7 @@ defaults:
   - metrics: metrics
   - datasets: image_road 
   - dataloader: main
-  - transforms: custom
+  - transforms: noisy
   - trainer: main
   - _self_
 optimizer:
