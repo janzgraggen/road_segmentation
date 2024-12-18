@@ -5,5 +5,8 @@ defaults:
 batch_transforms:
   train:
     _target_: src.transforms.NoisyTransform
-    road_threshold: 0.25
+    flip: False
+    erasing: False
+    noise: False 
     rotation: True
+    road_threshold: 0.25
