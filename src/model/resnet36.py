@@ -51,10 +51,10 @@ class ResidualBlock(nn.Module):
         return out
 
 
-# Define ResNet18 Model with Dropout
-class ResNet(nn.Module):
+# Define ResNet36 Model with Dropout
+class ResNet36(nn.Module):
     def __init__(self, patch_size, dropout_rate=0.3):
-        super(ResNet, self).__init__()
+        super(ResNet36, self).__init__()
 
         assert patch_size % 16 == 0, "Patch size must be a multiple of 16"
         out_dim = patch_size // 16
@@ -64,11 +64,11 @@ class ResNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        # ResNet-18 layer configurations: [2, 2, 2, 2]
-        self.layer1 = self._make_layer(64, 64, 2, 1, dropout_rate)
-        self.layer2 = self._make_layer(64, 128, 2, 2, dropout_rate)
-        self.layer3 = self._make_layer(128, 256, 2, 2, dropout_rate)
-        self.layer4 = self._make_layer(256, 512, 2, 2, dropout_rate)
+        # ResNet-36 layer configurations: [4, 4, 4, 4]
+        self.layer1 = self._make_layer(64, 64, 4, 1, dropout_rate)
+        self.layer2 = self._make_layer(64, 128, 4, 2, dropout_rate)
+        self.layer3 = self._make_layer(128, 256, 4, 2, dropout_rate)
+        self.layer4 = self._make_layer(256, 512, 4, 2, dropout_rate)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(512, out_dim**2)

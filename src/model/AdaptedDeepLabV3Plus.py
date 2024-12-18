@@ -2,6 +2,7 @@ import torch
 from torch import nn
 from torchvision.models.segmentation import deeplabv3_resnet101
 
+
 class AdaptedDeepLabV3Plus(nn.Module):
     def __init__(
         self,
@@ -17,6 +18,7 @@ class AdaptedDeepLabV3Plus(nn.Module):
             self.deeplab = deeplabv3_resnet101(pretrained=pretrained)
         elif backbone == "resnet50":
             from torchvision.models.segmentation import deeplabv3_resnet50
+
             self.deeplab = deeplabv3_resnet50(pretrained=pretrained)
         else:
             raise ValueError("Unsupported backbone. Choose 'resnet50' or 'resnet101'.")
@@ -31,16 +33,26 @@ class AdaptedDeepLabV3Plus(nn.Module):
 
         # Add additional convolutional layers to resize the output from 256x256 to 19x19
         self.extra_convs = nn.Sequential(
-            nn.Conv2d(num_classes, num_classes, kernel_size=3, stride=2, padding=1),  # 256 -> 128
+            nn.Conv2d(
+                num_classes, num_classes, kernel_size=3, stride=2, padding=1
+            ),  # 256 -> 128
             nn.ReLU(inplace=True),
-            nn.Conv2d(num_classes, num_classes, kernel_size=3, stride=2, padding=1),  # 128 -> 64
+            nn.Conv2d(
+                num_classes, num_classes, kernel_size=3, stride=2, padding=1
+            ),  # 128 -> 64
             nn.ReLU(inplace=True),
-            nn.Conv2d(num_classes, num_classes, kernel_size=3, stride=2, padding=1),  # 64 -> 32
+            nn.Conv2d(
+                num_classes, num_classes, kernel_size=3, stride=2, padding=1
+            ),  # 64 -> 32
             nn.ReLU(inplace=True),
-            nn.Conv2d(num_classes, num_classes, kernel_size=3, stride=2, padding=1),  # 32 -> 16
+            nn.Conv2d(
+                num_classes, num_classes, kernel_size=3, stride=2, padding=1
+            ),  # 32 -> 16
         )
 
-        self.upsample = nn.Upsample(size=(19, 19), mode='bilinear', align_corners=False) # Upsample to 19x19
+        self.upsample = nn.Upsample(
+            size=(19, 19), mode="bilinear", align_corners=False
+        )  # Upsample to 19x19
 
     def forward(self, img, **batch):
         # Forward pass through DeepLabV3
@@ -66,4 +78,3 @@ class AdaptedDeepLabV3Plus(nn.Module):
         result_info = result_info + f"\nTrainable parameters: {trainable_parameters}"
 
         return result_info
-

@@ -232,7 +232,7 @@ class BaseTrainer:
                 self.writer.add_scalar(
                     "learning rate", self.lr_scheduler.get_last_lr()[0]
                 )
-                self._log_scalars(self.train_metrics)
+                self._log_scalars(self.train_metrics, "train")
                 self._log_batch(batch_idx, batch)
                 # we don't want to reset train metrics at the start of every epoch
                 # because we are interested in recent train metrics
@@ -275,7 +275,7 @@ class BaseTrainer:
                     metrics=self.evaluation_metrics,
                 )
             self.writer.set_step(epoch * self.epoch_len, part)
-            self._log_scalars(self.evaluation_metrics)
+            self._log_scalars(self.evaluation_metrics, "inference")
             self._log_batch(
                 batch_idx, batch, part
             )  # log only the last batch during inference
@@ -438,7 +438,7 @@ class BaseTrainer:
         """
         return NotImplementedError()
 
-    def _log_scalars(self, metric_tracker: MetricTracker):
+    def _log_scalars(self, metric_tracker: MetricTracker, mode: str):
         """
         Wrapper around the writer 'add_scalar' to log all metrics.
 
@@ -448,7 +448,9 @@ class BaseTrainer:
         if self.writer is None:
             return
         for metric_name in metric_tracker.keys():
-            self.writer.add_scalar(f"{metric_name}", metric_tracker.avg(metric_name))
+            self.writer.add_scalar(
+                f"{mode}_{metric_name}", metric_tracker.avg(metric_name)
+            )
 
     def _save_checkpoint(self, epoch, save_best=False, only_best=False):
         """

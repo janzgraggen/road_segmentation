@@ -1,5 +1,5 @@
 defaults:
-  - model: resnet 
+  - model: resnet36 
   - writer: tensorboard 
   - metrics: metrics 
   - datasets: baseline 
@@ -17,8 +17,8 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 trainer:
   log_step: 50
-  n_epochs: 10 
-  epoch_len: 1000 
+  n_epochs: 1000 
+  epoch_len: 200 
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"
@@ -27,4 +27,4 @@ trainer:
   save_period: 5 # checkpoint each save_period epochs in addition to the best epoch
   early_stop: ${trainer.n_epochs} # epochs for early stopping
   save_dir: "saved"
-  seed: 1 
+  seed: 42368 

@@ -1,7 +1,0 @@
-train: 
-  - _target_: src.metrics.F1Metric
-    name: "F1-score"
-
-inference:
-  - _target_: src.metrics.F1Metric
-    name: "F1-score"
