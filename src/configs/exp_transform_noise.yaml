@@ -1,0 +1,8 @@
+
+defaults:
+  - exp_patch_400
+  - transforms: noise
+
+
+experiment:
+  name: exp_transform_noise

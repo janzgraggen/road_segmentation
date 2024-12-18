@@ -1,0 +1,8 @@
+
+defaults:
+  - exp_patch_400
+  - transforms: flip
+
+
+experiment:
+  name: exp_transform_flip

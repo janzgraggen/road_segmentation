@@ -14,8 +14,7 @@ git pull
 
 pip3 install -r requirements.txt
 
-python3 train.py -cn exp_patch_16 
-python3 train.py -cn exp_patch_32 
-python3 train.py -cn exp_patch_128 
-python3 train.py -cn exp_patch_304 
-python3 train.py -cn exp_patch_400 
+python3 train.py -cn exp_transform_erase
+python3 train.py -cn exp_transform_flip 
+python3 train.py -cn exp_transform_noise
+python3 train.py -cn exp_transform_noisy
