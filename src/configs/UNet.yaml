@@ -2,9 +2,9 @@ defaults:
   - model: UNet
   - writer: tensorboard 
   - metrics: metrics
-  - datasets: image_road 
+  - datasets: image
   - dataloader: main
-  - transforms: custom
+  - transforms: noisy
   - _self_
 optimizer:
   _target_: torch.optim.Adam
@@ -17,8 +17,8 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 trainer:
   log_step: 50
-  n_epochs:  5
-  epoch_len: 1000
+  n_epochs:  20
+  epoch_len: 100
   device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: mps # device name or "auto"
