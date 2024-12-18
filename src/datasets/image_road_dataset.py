@@ -22,7 +22,7 @@ class ImageRoadDataset(Dataset):
     def __init__(
         self,
         data_path: str,
-        target_path: str | None = None,
+        target_path: str = None,
     ):
         self.images = self._load_images(data_path)
         self.masks = None

@@ -26,7 +26,7 @@ class GridRoadDataset(ImageRoadDataset):
         cell_size: int,
         image_size: int,
         data_path: str,
-        target_path: str | None = None,
+        target_path: str = None,
     ):
         # Round the image size to the nearest multiple of the cell size
         image_size = (image_size // cell_size) * cell_size
