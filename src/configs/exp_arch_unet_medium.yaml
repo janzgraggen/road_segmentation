@@ -1,5 +1,5 @@
 defaults:
-  - model: unet 
+  - model: unet_medium
   - writer: tensorboard 
   - metrics: metrics
   - datasets: image
@@ -28,4 +28,6 @@ trainer:
   early_stop: ${trainer.n_epochs} # epochs for early stopping
   save_dir: "saved"
   seed: 8
-   
+
+experiment: 
+  name: exp_arch_unet_large
