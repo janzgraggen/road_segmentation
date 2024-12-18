@@ -4,14 +4,8 @@ from torch import nn
 
 class UNet(nn.Module):
     def __init__(
-<<<<<<< HEAD
         self, 
         in_channels=3, 
-=======
-        self,
-        patch_size=304,
-        in_channels=3,
->>>>>>> 38390a50a9d19a66952a1ef345713f2d6755a575
         num_classes=1,
         use_direct_stride=False,  # Boolean parameter to control stride behavior
         nrChannels1=16,  # Number of channels for the first set of layers
@@ -55,11 +49,8 @@ class UNet(nn.Module):
             nrChannels2, nrChannels1, kernel_size=2, stride=2
         )  # 152 -> 304
         self.dec1 = self._block(nrChannels1 + nrChannels1, nrChannels1, drop_prob)
-<<<<<<< HEAD
         
 
-=======
->>>>>>> 38390a50a9d19a66952a1ef345713f2d6755a575
 
         # Final output layer with patch-level prediction
 
