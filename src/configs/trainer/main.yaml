@@ -1,9 +1,9 @@
 log_step: 50
-n_epochs: 10 
+n_epochs: 50 
 epoch_len: null # set this to a fixed value (e.g. 500) for iteration based training
 device_tensors: ["img", "labels"] # which tensors should be on device (ex. GPU)
 resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
-device: cpu # device name or "auto"
+device: auto # device name or "auto"
 override: True # if True, will override the previous run with the same name
 monitor: "max inference_f1" # "off" or "max/min metric_name", i.e. our goal is to maximize/minimize metric
 save_period: 5 # checkpoint each save_period epochs in addition to the best epoch
