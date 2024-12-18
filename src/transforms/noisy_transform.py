@@ -14,7 +14,6 @@ class NoisyTransform:
         flip: bool = True,
         noise: bool = True,
         erasing: bool = True,
-        rotation: bool = False,
     ):
         self.road_threshold = road_threshold
 
@@ -24,9 +23,6 @@ class NoisyTransform:
         if flip:
             base_transforms.append(transforms.RandomVerticalFlip())
             base_transforms.append(transforms.RandomHorizontalFlip())
-
-        if rotation:
-            base_transforms.append(transforms.RandomRotation(180))
 
         base_transforms.append(transforms.ToDtype(torch.float32, scale=True))
 

@@ -1,8 +1,0 @@
-
-defaults:
-  - exp_patch_400
-  - override transforms: rotation
-
-
-experiment:
-  name: exp_transform_rotation

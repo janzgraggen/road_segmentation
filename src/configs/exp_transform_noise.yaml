@@ -5,4 +5,4 @@ defaults:
 
 
 experiment:
-  name: exp_transform_noise_01
+  name: exp_transform_noise

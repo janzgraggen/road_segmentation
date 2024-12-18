@@ -6,4 +6,3 @@ batch_transforms:
   train:
     _target_: src.transforms.NoisyTransform
     road_threshold: 0.25
-    rotation: True
