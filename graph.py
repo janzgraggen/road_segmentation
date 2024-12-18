@@ -24,9 +24,22 @@ def main(metric):
     # Create a plot
     print("Creating plot")
     plt.figure()
+    max_values = []
+    min_values = []
+
     for data in plot_data:
         x, y = zip(*data)
         plt.plot(x, y)
+        max_values.append(max(y))
+        min_values.append(min(y))
+
+    print("\nMax values:")
+    for i in range(len(max_values)):
+        print(f"{i}: {max_values[i]}")
+
+    print("\nMin values:")
+    for i in range(len(min_values)):
+        print(f"{i}: {min_values[i]}")
 
     plt.title(f"Comparison of runs using metric {metric}")
     plt.legend([runs[i] for i in range(len(plot_data))])
