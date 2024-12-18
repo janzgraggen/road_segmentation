@@ -46,7 +46,7 @@ class BinaryCrossEntropyLossWN(nn.Module):
                     if road_neighbors < 2:  # Fewer than 2 neighbors are roads
                         neighborhood_penalty += 1
                 else:  # Current patch is non-road
-                    if road_neighbors > 2:  # More than 2 neighbors are roads
+                    if road_neighbors > 6:  # More than 7 neighbors are roads
                         neighborhood_penalty += 1
 
         return neighborhood_penalty
