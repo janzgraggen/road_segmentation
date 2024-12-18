@@ -2,12 +2,13 @@ import argparse
 import os
 
 import matplotlib.pyplot as plt
-import numpy as np
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 
-def main(metric):
+def main(metric, name, prefix):
     runs = os.listdir("runs")
+    runs = list(filter(lambda run: run.startswith(prefix), runs))
+
     plot_data = []
     for run in runs:
         if "exp" in run:
@@ -41,15 +42,18 @@ def main(metric):
     for i in range(len(min_values)):
         print(f"{i}: {min_values[i]}")
 
-    plt.title(f"Comparison of runs using metric {metric}")
     plt.legend([runs[i] for i in range(len(plot_data))])
     plt.xlabel("Global step")
-    plt.ylabel(metric)
-    plt.show()
+    plt.ylabel(name)
+    plt.tight_layout()
+    plt.savefig(f"figures/{prefix}_{metric}.png")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("-m", "--metric", type=str)
+    ap.add_argument("-n", "--name", type=str)
+    ap.add_argument("-p", "--prefix", type=str)
+
     args = ap.parse_args()
-    main(args.metric)
+    main(args.metric, args.name, args.prefix)

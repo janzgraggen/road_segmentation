@@ -1,8 +1,8 @@
 defaults:
-  - model: mobilenetv3 
+  - model: resnet36 
   - writer: tensorboard 
   - metrics: metrics 
-  - datasets: image 
+  - datasets: baseline 
   - dataloader: main
   - transforms: noisy
   - trainer: main
@@ -16,5 +16,10 @@ lr_scheduler:
   step_size: ${trainer.epoch_len}
 loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
+
+trainer:
+  n_epochs:  20
+  epoch_len: 100
+
 experiment:
-  name: mobilenetv3 
+  name: exp_arch_resnet36
