@@ -1,0 +1,14 @@
+
+defaults:
+  - exp_patch_0  # Import all settings from the base configuration
+
+## Override
+datasets:
+  train:
+    cell_size: 400
+
+  inference:
+    cell_size: 400
+
+experiment:
+  name: exp_patch_400

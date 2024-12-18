@@ -1,0 +1,35 @@
+defaults:
+  - model: unet 
+  - writer: tensorboard 
+  - metrics: metrics
+  - dataloader: main
+  - trainer: main
+  - transforms: main
+  - _self_
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 1e-3
+lr_scheduler:
+  _target_: torch.optim.lr_scheduler.StepLR
+  gamma: 0.9
+  step_size: ${trainer.epoch_len}
+loss_function:
+  _target_: src.loss.BinaryCrossEntropyLoss
+datasets:
+  train:
+    _target_: src.datasets.GridRoadDataset
+    cell_size: 0
+    image_size: 400
+    data_path: "road_data/train/images"
+    target_path: "road_data/train/groundtruth"
+
+  inference:
+    _target_: src.datasets.GridRoadDataset
+    cell_size: 0
+    image_size: 400
+    data_path: "road_data/validation/images"
+    target_path: "road_data/validation/groundtruth"
+
+
+experiment:
+  name: exp_patch_0
