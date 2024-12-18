@@ -4,9 +4,8 @@ from torch import nn
 
 class UNet(nn.Module):
     def __init__(
-        self,
-        patch_size=304,
-        in_channels=3,
+        self, 
+        in_channels=3, 
         num_classes=1,
         use_direct_stride=False,  # Boolean parameter to control stride behavior
         nrChannels1=16,  # Number of channels for the first set of layers
@@ -50,14 +49,17 @@ class UNet(nn.Module):
             nrChannels2, nrChannels1, kernel_size=2, stride=2
         )  # 152 -> 304
         self.dec1 = self._block(nrChannels1 + nrChannels1, nrChannels1, drop_prob)
+        
+
 
         # Final output layer with patch-level prediction
+
+
         if use_direct_stride:
             # Direct stride 16 convolution (304 -> 19)
-            self.final_conv = nn.Conv2d(
-                nrChannels1, num_classes, kernel_size=3, stride=16, padding=1
-            )  # Direct reduction to 19x19
-        else:
+            self.final_conv = nn.AvgPool2d(16)
+              # Direct reduction to 19x19
+        else:                               
             # Multiple stride 2 convolutions (304 -> 152 -> 76 -> 38 -> 19)
             self.final_conv1 = nn.Conv2d(
                 nrChannels1, nrChannels1, kernel_size=3, stride=2, padding=1
