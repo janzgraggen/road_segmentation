@@ -7,7 +7,7 @@ class BinaryCrossEntropyLossWN(nn.Module):
     Combined Binary Cross-Entropy Loss with Neighborhood Consistency Loss.
     """
 
-    def __init__(self, lambda_neighborhood=1.0):
+    def __init__(self, lambda_neighborhood=0.05):
         """
         Initialize the loss function.
 
