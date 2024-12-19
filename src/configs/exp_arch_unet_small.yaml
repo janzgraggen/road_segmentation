@@ -15,7 +15,8 @@ lr_scheduler:
   gamma: 0.9
   step_size: ${trainer.epoch_len}
 loss_function:
-  _target_: src.loss.BinaryCrossEntropyLossWN
+  _target_: src.loss.BinaryCrossEntropyLoss
+
 trainer:
   n_epochs:  20
   epoch_len: 100
