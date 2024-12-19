@@ -23,6 +23,9 @@ def main():
 
         data[run_name] = max(values)
 
+    items = data.items()
+    items = sorted(items, key=lambda item: item[1])
+
     SUBMISSION = "submission"
 
     latex = ""
@@ -32,7 +35,7 @@ def main():
     latex += "Experiment & F1 score \\\\ \n"
     latex += "\\hline\n"
 
-    for name, value in data.items():
+    for name, value in items:
         latex += f"{name} & {value:.3f} \\\\\n"
 
     latex += "\\end{tabular}\n"

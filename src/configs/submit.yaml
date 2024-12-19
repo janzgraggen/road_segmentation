@@ -4,6 +4,6 @@ defaults:
   - transforms: main 
   - _self_
 
-state_dir: "saved/baseline"
+state_dir: "saved/exp_arch_mobilenetv3"
 
-threshold: 0.5
+threshold: 0.7

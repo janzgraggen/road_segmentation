@@ -7,4 +7,6 @@ defaults:
   - transforms: main 
   - _self_
 
-state_dir: "saved/testing"
+state_dir: "saved/exp_arch_mobilenetv3"
+
+threshold: 0.7

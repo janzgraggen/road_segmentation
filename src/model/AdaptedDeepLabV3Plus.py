@@ -9,11 +9,10 @@ class AdaptedDeepLabV3Plus(nn.Module):
         num_classes=1,  # Number of output classes
         backbone="resnet101",  # Backbone for DeepLabV3 (e.g., resnet50, resnet101)
         pretrained=True,  # Use pretrained weights
-        extra_convs=True # Add extra convolutional layers
-
+        extra_convs=True,  # Add extra convolutional layers
     ):
         super(AdaptedDeepLabV3Plus, self).__init__()
-        
+
         # Load DeepLabV3 model with specified backbone
         if backbone == "resnet101":
             self.deeplab = deeplabv3_resnet101(pretrained=pretrained)
@@ -29,7 +28,6 @@ class AdaptedDeepLabV3Plus(nn.Module):
         else:
             raise ValueError("Unsupported backbone. Choose 'resnet50' or 'resnet101'.")
 
-
         # Modify the classifier to output the desired number of classes
         self.deeplab.classifier[4] = nn.Conv2d(256, num_classes, kernel_size=1)
 
@@ -37,7 +35,7 @@ class AdaptedDeepLabV3Plus(nn.Module):
             nn.AvgPool2d(16),
             nn.Flatten(),
         )
-        
+
         # Add additional convolutional layers to resize the output from 256x256 to 19x19
         self.extra_convs = nn.Sequential(
             nn.Conv2d(
@@ -62,14 +60,13 @@ class AdaptedDeepLabV3Plus(nn.Module):
             self.finish = self.extra_convs
         else:
             self.finish = self.down_sample
-        
 
     def forward(self, img, **batch):
         # Forward pass through DeepLabV3
         x = self.deeplab(img)["out"]  # Extract the output logits
 
         # Pass the logits through additional convolutional layers
-        logits = self.finish(x)  
+        logits = self.finish(x)
 
         return {"logits": logits}
 

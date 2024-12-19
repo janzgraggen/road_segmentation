@@ -12,7 +12,9 @@ from src.utils.train_utils import create_target
 
 def main(image_number, validation=False):
     # Reading submission file
-    submission_path = os.path.join(ROOT_PATH, "saved/testing", "submission.csv")
+    submission_path = os.path.join(
+        ROOT_PATH, "saved/exp_arch_mobilenetv3", "submission.csv"
+    )
     with open(submission_path, "r") as f:
         reader = csv.reader(f)
         data = list(reader)
@@ -96,6 +98,7 @@ def main(image_number, validation=False):
                 )
                 ax.add_patch(rect)
 
+    plt.tight_layout()
     plt.show()
 
 
