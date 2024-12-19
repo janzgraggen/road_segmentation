@@ -60,10 +60,12 @@ To reproduce the same submission we got on AICrowed use the following command:
 python3 submit.py
 ```
 
-> [!NOTE]  
-> To use the pre-trained weights you should have [git lfs](https://git-lfs.com/) installed.
-
 This will create a `submission.csv` file in the root of this repo.
+
+> [!NOTE]  
+> To use the trained weights you should have [git lfs](https://git-lfs.com/) installed.
+> If you have some issues with pickle, we suggest training the model by yourself.
+> This should not take too long on a single GPU as the model uses pre-trained weights.
 
 To train the same model which was used for the submission use:
 
