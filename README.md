@@ -1,4 +1,4 @@
-# Image classification with PyTorch
+# Road segmentation from aerial imagery with PyTorch
 
 <p align="center">
   <a href="#about">About</a> •
@@ -10,8 +10,7 @@
 </p>
 
 ## About
-
-This in an example usage of a [PyTorch Project Template](https://github.com/Blinorot/pytorch_project_template). The task is to do image classification. We use [MNIST](https://yann.lecun.com/exdb/mnist/) and [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) datasets.
+This poject aims to to evaluate the performance of different model architectures and applying different image transforms for road segmentation.
 
 ## Installation
 
@@ -63,30 +62,37 @@ python3 train.py -cn=CONFIG_NAME HYDRA_CONFIG_ARGUMENTS
 
 Where `CONFIG_NAME` is a config from `src/configs` and `HYDRA_CONFIG_ARGUMENTS` are optional arguments.
 
-To run inference (evaluate the model or save predictions):
-
+To run inference on the test dataset and generate submission file:
 ```bash
-python3 inference.py HYDRA_CONFIG_ARGUMENTS
+python3 submit.py HYDRA_CONFIG_ARGUMENTS
+```
+
+To visualize the results in the submission file:
+```bash
+python3 visualize.py -i IMAGE_INDEX 
 ```
 
 ## Examples
 
-To train a simple MLP on MNIST, run:
+To train the baseline configuration 
 
 ```bash
-python3 train.py model=baseline
+python3 train.py -cn baseline
 ```
 
-If you want train your MLP on CIFAR-10, run this instead:
-
+To run inference on the test dataset and generate the submission file:
 ```bash
-python3 train.py model=baseline model.n_feats=3072 datasets=cifar datasets/batch_transforms=cifar
+python3 submit.py -cn submit
 ```
 
-If you want to fine-tune ResNet18 on CIFAR-10, run this:
-
+To run inference on the validation dataset and generate the submission file:
 ```bash
-python3 train.py model=resnet datasets=cifar model.input_channels=3 transforms/batch_transforms=cifar_resnet
+python3 submit.py -cn validation 
+```
+
+To visualize the inference on the first image (a submission file must already be generated):
+```bash
+python3 visualize.py -i 1 
 ```
 
 ## Credits
