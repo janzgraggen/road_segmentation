@@ -4,7 +4,7 @@ defaults:
   - metrics: metrics 
   - datasets: baseline 
   - dataloader: main
-  - transforms: noisy
+  - transforms: flip_erase
   - trainer: main
   - _self_
 optimizer:
