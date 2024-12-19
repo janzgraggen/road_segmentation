@@ -18,7 +18,7 @@ loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
 
 trainer:
-  n_epochs:  10
+  n_epochs:  30
   epoch_len: 100
 
 experiment: 
