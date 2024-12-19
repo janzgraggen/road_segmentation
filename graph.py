@@ -5,22 +5,22 @@ import matplotlib.pyplot as plt
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 
-def main(metric, name, prefix):
+def main(metric, name, prefix, additional, limit):
     runs = os.listdir("runs")
-    runs = list(filter(lambda run: run.startswith(prefix), runs))
+    runs = list(filter(lambda run: run.startswith(prefix) or run == additional, runs))
+    runs = sorted(runs, key=lambda run: (len(run), run))
 
     plot_data = []
     for run in runs:
-        if "exp" in run:
-            print(f"Loading run {run}")
-            file = os.listdir(f"runs/{run}")[0]
-            path = f"runs/{run}/{file}"
+        print(f"Loading run {run}")
+        file = os.listdir(f"runs/{run}")[0]
+        path = f"runs/{run}/{file}"
 
-            event_acc = EventAccumulator(path)
-            event_acc.Reload()
+        event_acc = EventAccumulator(path)
+        event_acc.Reload()
 
-            x = [(s.step, s.value) for s in event_acc.Scalars(metric)]
-            plot_data.append(x)
+        x = [(s.step, s.value) for s in event_acc.Scalars(metric)]
+        plot_data.append(x)
 
     # Create a plot
     print("Creating plot")
@@ -45,15 +45,20 @@ def main(metric, name, prefix):
     plt.legend([runs[i] for i in range(len(plot_data))])
     plt.xlabel("Global step")
     plt.ylabel(name)
+    if limit:
+        plt.ylim(0.65, 0.85)
+
     plt.tight_layout()
     plt.savefig(f"figures/{prefix}_{metric}.png")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("-m", "--metric", type=str)
-    ap.add_argument("-n", "--name", type=str)
+    ap.add_argument("-m", "--metric", type=str, default="inference_f1")
+    ap.add_argument("-n", "--name", type=str, default="F1-score")
     ap.add_argument("-p", "--prefix", type=str)
+    ap.add_argument("-a", "--additional", type=str, default="baseline")
+    ap.add_argument("-l", "--limit", action="store_true")
 
     args = ap.parse_args()
-    main(args.metric, args.name, args.prefix)
+    main(args.metric, args.name, args.prefix, args.additional, args.limit)
