@@ -1,8 +1,5 @@
 _target_: src.model.AdaptedDeepLabV3Plus
 
-
-patch_size: 256
-num_classes: 1
-
 backbone: mobilenetv3  # Backbone for DeepLabV3 (e.g., resnet50, resnet101,mobilenetv3)
 pretrained: True  # Use pretrained weights
+extra_convs: True  # Use extra convolutions

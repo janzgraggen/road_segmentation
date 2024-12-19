@@ -2,7 +2,7 @@ defaults:
   - model: AdaptedDeepLabV3Plus
   - writer: tensorboard 
   - metrics: metrics
-  - datasets: image_road 
+  - datasets: image
   - dataloader: main
   - transforms: noisy
   - trainer: main
@@ -19,6 +19,7 @@ loss_function:
 model: 
  backbone: mobilenetv3
  pretrained: True
+ extra_convs: True
 
- experiment:
+experiment:
   name: AdaptedDeepLabV3Plus  
