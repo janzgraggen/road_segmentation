@@ -20,6 +20,11 @@ class AdaptedDeepLabV3Plus(nn.Module):
             from torchvision.models.segmentation import deeplabv3_resnet50
 
             self.deeplab = deeplabv3_resnet50(pretrained=pretrained)
+
+        elif backbone == "mobilenetv3":
+            from torchvision.models.segmentation import deeplabv3_mobilenet_v3_large
+
+            self.deeplab = deeplabv3_mobilenet_v3_large(pretrained=pretrained)
         else:
             raise ValueError("Unsupported backbone. Choose 'resnet50' or 'resnet101'.")
 

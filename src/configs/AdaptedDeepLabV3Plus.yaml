@@ -16,5 +16,9 @@ lr_scheduler:
   step_size: ${trainer.epoch_len}
 loss_function:
   _target_: src.loss.BinaryCrossEntropyLoss
-experiment:
-  name: AdaptedDeepLabV3Plus 
+model: 
+ backbone: mobilenetv3
+ pretrained: True
+
+ experiment:
+  name: AdaptedDeepLabV3Plus  
