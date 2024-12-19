@@ -52,6 +52,22 @@ Follow these steps:
    pre-commit install
    ```
 
+## Submission
+
+To reproduce the same submission we got on AICrowed use the following command:
+
+```bash
+python3 submit.py
+```
+
+This will create a `submission.csv` file in the root of this repo.
+
+To train the same model which was used for the submission use:
+
+```bash
+python3 train.py -cn exp_arch_mobilenetv3
+```
+
 ## How To Use
 
 To train a model, run the following command:

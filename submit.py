@@ -94,7 +94,7 @@ def main(config):
                 submission.append([id, patch.item()])
 
     name = "submission.csv"
-    submission_path = os.path.join(ROOT_PATH, config.state_dir, name)
+    submission_path = os.path.join(ROOT_PATH, name)
 
     with open(submission_path, "w", newline="") as f:
         columns = ["id", "prediction"]
